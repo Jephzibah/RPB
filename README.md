@@ -140,30 +140,50 @@ stripe listen --forward-to localhost:8787/api/webhooks/stripe   # prints whsec_�
 
 ## Orders
 
-Paid orders are stored in Cloudflare D1 (`migrations/`). Customers look orders up by email. Site owners and the provider manage them at `/admin`.
+Paid orders are stored in Cloudflare D1 (`migrations/`). On eCom sites (`features.shop`), the nav has a **Log in** link to `/login`. The email entered there decides where the person goes:
 
-- **Customers** (`/orders`): enter the email they ordered with. They get a one-time link (expires in 15 minutes, max 3 per 15 minutes), confirm on `/orders/verify`, and get a 1-hour session. There are no accounts and no passwords. The response is identical whether or not the email has orders. Only a hash of each link token is stored.
-- **Admin** (`/admin`): order list and search, status and tracking (optionally emailing the customer), internal notes, change a customer's email, and CSV export. Cloudflare Access handles sign-in, and the Worker re-verifies Access's signed JWT on every `/api/admin/*` call. Every change goes to `audit_log` with who made it.
-- **Stored per order:** email, name, items, totals, shipping address, status and tracking. No card data.
+- **Admins** (anyone on the Access policy, see Admin users) go straight to `/admin`, where Cloudflare Access emails them a one-time code.
+- **Customers** get a one-time link (expires in 15 minutes, max 3 per 15 minutes). They confirm on `/orders/verify` and get a 1-hour session on `/orders`. There are no accounts and no passwords. The response is identical whether or not the email has orders. Only a hash of each link token is stored.
+
+What each side can do:
+
+- **Customers** (`/orders`): see their orders and status/tracking, and **message the business** on each order. Each message emails `CONTACT_TO` with a link to the order in the admin. Limit: 10 customer messages per order per hour.
+- **Admin, Orders** (`/admin`): list, search, and the order detail with:
+  - **Customer**: edit name, email and shipping address. Name and address change that order only. A new email moves **all** of the customer's orders and needs a "verified this person" confirmation.
+  - **Messages**: the conversation with the customer. Each reply emails them.
+  - Status and tracking (optionally emailing the customer), **internal notes** (never shown to customers), and history.
+  - Links like `/admin#order-1001` open an order directly. The notification emails use them.
+- **Admin, Customers** (`/admin/customers`): everyone who has ordered, with order count, total spent and last order. Open one to see their orders or change their email.
+- **Admin, Admin users** (`/admin/users`): who can sign in to the admin. Add or remove people; changes update the Cloudflare Access policy directly. Owners can manage owners; only the provider can remove a provider; nobody can remove themselves.
+
+Cloudflare Access handles admin sign-in, and the Worker re-verifies Access's signed JWT on every `/api/admin/*` call. Every admin change goes to `audit_log` with who made it.
+
+Stored per order: email, name, items, totals, shipping address, status, tracking, messages and notes. No card data.
 
 ### Setup (one time per site)
 
-1. `npx wrangler d1 create <name>` and paste the `database_id` into `wrangler.jsonc`. Then `npx wrangler d1 migrations apply <name> --remote`. Run that again after adding a migration; deploys don't run migrations.
+1. `npx wrangler d1 create <name>` and paste the `database_id` into `wrangler.jsonc`. Then `npx wrangler d1 migrations apply <name> --remote`. Run that again after adding a migration (e.g. `0002_messages.sql`); deploys don't run migrations.
 2. `npx wrangler secret put ORDERS_SECRET` (a long random string, e.g. `openssl rand -base64 32`). Changing it signs every customer out.
 3. Zero Trust → Access → Applications → **Add a self-hosted application**:
-   - Domains `<domain>/admin` and `<domain>/api/admin`.
+   - Destinations `<domain>/admin` and `<domain>/api/admin` (plus `www.` versions if the site answers on both). Subpaths like `/admin/customers` are covered.
    - Policy: **Allow**, emails = you (provider) + the site owner.
    - Login method: one-time PIN (optionally Google).
 
    Copy the team domain (`<team>.cloudflareaccess.com`) and the app's **Audience (AUD) tag** into `ACCESS_TEAM_DOMAIN` / `ACCESS_AUD` in `wrangler.jsonc`, and put your own email in `PROVIDER_EMAILS`.
-4. `workers_dev` and `preview_urls` are off in `wrangler.jsonc` so the Worker is only reachable on the domain Access protects. Keep it that way.
+4. **Admin users page:**
+   - Put the account ID in `CF_ACCOUNT_ID` and the policy's ID in `ACCESS_POLICY_ID`.
+   - Create an API token (My Profile → API Tokens → Custom token) with **Account → Access: Apps and Policies → Edit**, for this account only.
+   - Run `npx wrangler secret put CF_API_TOKEN`.
+
+   Without the token, `/admin/users` says it isn't set up, and `/login` falls back to `PROVIDER_EMAILS` + `OWNER_EMAILS` to recognise admins.
+5. `workers_dev` and `preview_urls` are off in `wrangler.jsonc` so the Worker is only reachable on the domain Access protects. Keep it that way.
 
 Local: `npx wrangler d1 migrations apply <name> --local`. Then `ACCESS_DEV_EMAIL` and `ORDERS_SECRET` in `.dev.vars` let `/admin` work on localhost without Access.
 
 ### Runbook: lost access
 
-- **Site owner changed or lost their email:** in Zero Trust → Access → the app's policy, replace their email. Update `CONTACT_TO` in `wrangler.jsonc` if order notifications should follow, then rebuild. Nothing in the database changes.
-- **Customer lost access to their email:** first confirm who they are another way, e.g. the order number plus the card's last 4 digits (in Stripe/PayPal), or a reply from a phone number on the order. Then use **Change a customer's email** on `/admin`. It moves every order on the old address, emails both addresses (the old one sees a masked new address) and writes the change to `audit_log`.
+- **Site owner changed or lost their email:** on `/admin/users`, add their new email and remove the old one. Or edit the Access policy in Zero Trust. Update `CONTACT_TO` in `wrangler.jsonc` if notifications should follow, then rebuild. Removing someone stops new sign-ins; to end a session they already have (up to 24 hours), revoke it in Zero Trust → Users.
+- **Customer lost access to their email:** first confirm who they are another way, e.g. the order number plus the card's last 4 digits (in Stripe/PayPal), or a reply from a phone number on the order. Then change it in the order's **Customer** section or on `/admin/customers`. It moves every order on the old address, emails both addresses (the old one sees a masked new address) and writes the change to `audit_log`.
 - **Audit trail:** `npx wrangler d1 execute <name> --remote --command "SELECT * FROM audit_log ORDER BY id DESC LIMIT 50"`.
 
 ## Security headers

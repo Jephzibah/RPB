@@ -9,12 +9,13 @@
 	<main id="main-content" tabindex="-1">
 		<section id="admin">
 			<div class="container" data-admin>
+				<include src="partials/admin-nav.html" orders="1"></include>
 				<div class="admin__bar">
 					<h1>Orders</h1>
 					<p class="admin__who"><span data-admin-who></span> <a href="/cdn-cgi/access/logout">Sign out</a></p>
 				</div>
 				<noscript><p>The orders admin needs JavaScript.</p></noscript>
-				<p class="form__status" role="status" data-admin-status></p>
+				<div class="form__status" role="status" data-admin-status></div>
 
 				<form class="admin__filters" data-admin-filters>
 					<div class="form__field">
@@ -49,9 +50,71 @@
 
 				<div class="admin__detail" data-admin-detail tabindex="-1" hidden>
 					<h2 data-admin-detail-title></h2>
-					<div data-admin-detail-body></div>
+					<div data-admin-summary></div>
 
-					<form class="form admin__update" data-admin-update>
+					<div class="admin__panel">
+						<div class="admin__panel-head">
+							<h3>Customer</h3>
+							<button class="link-button" type="button" aria-expanded="false" aria-controls="admin-customer-form" data-admin-edit-toggle>Edit</button>
+						</div>
+						<div data-admin-customer></div>
+						<form id="admin-customer-form" class="form" data-admin-customer-form hidden>
+							<div class="form__field">
+								<label for="admin-c-name">Name</label>
+								<input id="admin-c-name" name="name" type="text" maxlength="200" autocomplete="off">
+							</div>
+							<div class="form__field">
+								<label for="admin-c-email">Email</label>
+								<input id="admin-c-email" name="email" type="email" maxlength="200" required autocomplete="off">
+							</div>
+							<div class="form__field form__field--full admin__confirm" data-admin-confirm hidden>
+								<p>Changing the email moves <strong>all</strong> of this customer's orders to the new address and emails both addresses. Only do this after confirming who you're talking to, for example the order number and the last 4 digits of the card used.</p>
+								<label class="admin__check"><input name="confirmed" type="checkbox"> I've verified this person owns these orders</label>
+							</div>
+							<div class="form__field form__field--full">
+								<label for="admin-c-line1">Address</label>
+								<input id="admin-c-line1" name="line1" type="text" maxlength="200" autocomplete="off">
+							</div>
+							<div class="form__field form__field--full">
+								<label for="admin-c-line2">Address line 2 <span class="form__optional">(optional)</span></label>
+								<input id="admin-c-line2" name="line2" type="text" maxlength="200" autocomplete="off">
+							</div>
+							<div class="form__field">
+								<label for="admin-c-city">City</label>
+								<input id="admin-c-city" name="city" type="text" maxlength="100" autocomplete="off">
+							</div>
+							<div class="form__field">
+								<label for="admin-c-state">State / region</label>
+								<input id="admin-c-state" name="state" type="text" maxlength="100" autocomplete="off">
+							</div>
+							<div class="form__field">
+								<label for="admin-c-postal">Postal code</label>
+								<input id="admin-c-postal" name="postal_code" type="text" maxlength="20" autocomplete="off">
+							</div>
+							<div class="form__field">
+								<label for="admin-c-country">Country code <span class="form__optional">(e.g. US)</span></label>
+								<input id="admin-c-country" name="country" type="text" maxlength="2" autocomplete="off">
+							</div>
+							<div class="form__field form__field--full admin__actions">
+								<button class="btn" type="submit">Save customer</button>
+								<button class="link-button" type="button" data-admin-edit-cancel>Cancel</button>
+							</div>
+						</form>
+					</div>
+
+					<div class="admin__panel">
+						<h3>Messages with the customer</h3>
+						<div data-admin-thread></div>
+						<form class="form" data-admin-message>
+							<div class="form__field form__field--full">
+								<label for="admin-message">Message the customer <span class="form__optional">(they'll get an email)</span></label>
+								<textarea id="admin-message" name="body" rows="3" maxlength="2000" required></textarea>
+							</div>
+							<div class="form__field form__field--full"><button class="btn" type="submit">Send message</button></div>
+						</form>
+					</div>
+
+					<form class="form admin__panel" data-admin-update>
 						<h3 class="form__field form__field--full">Update order</h3>
 						<div class="form__field">
 							<label for="admin-order-status">Status</label>
@@ -74,31 +137,23 @@
 						<div class="form__field form__field--full"><button class="btn" type="submit">Save</button></div>
 					</form>
 
-					<form class="form admin__note" data-admin-note>
-						<div class="form__field form__field--full">
-							<label for="admin-note">Add an internal note <span class="form__optional">(customers never see these)</span></label>
-							<textarea id="admin-note" name="body" rows="3" maxlength="2000" required></textarea>
-						</div>
-						<div class="form__field form__field--full"><button class="btn btn--hollow" type="submit">Add note</button></div>
-					</form>
-				</div>
+					<div class="admin__panel">
+						<h3>Internal notes <span class="form__optional">(customers never see these)</span></h3>
+						<div data-admin-notes></div>
+						<form class="form" data-admin-note>
+							<div class="form__field form__field--full">
+								<label for="admin-note">Add a note</label>
+								<textarea id="admin-note" name="body" rows="3" maxlength="2000" required></textarea>
+							</div>
+							<div class="form__field form__field--full"><button class="btn btn--hollow" type="submit">Add note</button></div>
+						</form>
+					</div>
 
-				<form class="form admin__email" data-admin-email>
-					<h2 class="form__field form__field--full">Change a customer's email</h2>
-					<p class="form__field form__field--full">Moves every order from the old address to the new one and emails both. Only do this after confirming who you're talking to, e.g. their order number and the last 4 digits of the card used.</p>
-					<div class="form__field">
-						<label for="admin-email-from">Current email</label>
-						<input id="admin-email-from" name="from" type="email" required maxlength="200">
+					<div class="admin__panel">
+						<h3>History</h3>
+						<div data-admin-history></div>
 					</div>
-					<div class="form__field">
-						<label for="admin-email-to">New email</label>
-						<input id="admin-email-to" name="to" type="email" required maxlength="200">
-					</div>
-					<div class="form__field form__field--full">
-						<label class="admin__check"><input name="confirmed" type="checkbox" required> I've verified this person owns these orders</label>
-					</div>
-					<div class="form__field form__field--full"><button class="btn" type="submit">Change email</button></div>
-				</form>
+				</div>
 			</div>
 		</section>
 	</main>

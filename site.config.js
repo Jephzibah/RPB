@@ -19,6 +19,7 @@ export default {
 		{ label: 'About', href: '/about' },
 		{ label: 'Shop', href: '/shop', feature: 'shop' },
 		{ label: 'Contact', href: '/contact', feature: 'contact' },
+		{ label: 'Log in', href: '/login', feature: 'shop' },
 	],
 
 	features: {

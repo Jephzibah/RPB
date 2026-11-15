@@ -1,9 +1,11 @@
 import site from '../../site.config.js';
 
 export class HttpError extends Error {
-	constructor(status, message) {
+	// `internal` is shown to signed-in admins only (in error details), never to the public
+	constructor(status, message, internal) {
 		super(message);
 		this.status = status;
+		this.internal = internal;
 	}
 }
 
@@ -32,7 +34,7 @@ export function requireEnv(env, ...names) {
 	const missing = names.filter((name) => !env[name]);
 	if (missing.length) {
 		console.error(`Missing configuration: ${missing.join(', ')}`);
-		throw new HttpError(503, 'This feature is not configured yet.');
+		throw new HttpError(503, 'This feature is not configured yet.', `Missing configuration: ${missing.join(', ')}`);
 	}
 }
 
@@ -53,3 +55,9 @@ export const clean = (value, max) =>
 		.slice(0, max);
 
 export const isEmail = (value) => /^[^\s@<>()",;:]+@[^\s@<>()",;:]+\.[^\s@<>()",;:]+$/.test(value) && value.length <= 200;
+
+export const emailList = (value) =>
+	String(value || '')
+		.split(',')
+		.map((email) => email.trim().toLowerCase())
+		.filter(Boolean);

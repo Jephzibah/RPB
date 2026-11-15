@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<include src="partials/head.html" title="Admin users" noindex="1"></include>
+</head>
+<body>
+	<include src="partials/header.html"></include>
+
+	<main id="main-content" tabindex="-1">
+		<section id="admin-users">
+			<div class="container" data-admin-users>
+				<include src="partials/admin-nav.html" users="1"></include>
+				<h1>Admin users</h1>
+				<noscript><p>The admin needs JavaScript.</p></noscript>
+				<p>These people can sign in to the admin with a one-time code sent to their email. Changes apply right away. Someone you remove can't sign in again, but a session they already have can last up to 24 hours unless it's revoked in Cloudflare Zero Trust → Users.</p>
+				<div class="form__status" role="status" data-admin-status></div>
+
+				<ul class="admin__users" data-admin-users-list></ul>
+
+				<form class="form admin__panel" data-admin-users-add>
+					<h2 class="form__field form__field--full">Add an admin</h2>
+					<div class="form__field">
+						<label for="users-email">Email</label>
+						<input id="users-email" name="email" type="email" required maxlength="200" autocomplete="off">
+					</div>
+					<div class="form__field form__field--full">
+						<p class="form__optional">They'll get an email letting them know, with a link to sign in.</p>
+						<button class="btn" type="submit">Add admin</button>
+					</div>
+				</form>
+			</div>
+		</section>
+	</main>
+
+	<include src="partials/footer.html"></include>
+</body>
+</html>

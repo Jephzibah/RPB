@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<include src="partials/head.html" title="Customers" noindex="1"></include>
+</head>
+<body>
+	<include src="partials/header.html"></include>
+
+	<main id="main-content" tabindex="-1">
+		<section id="admin-customers">
+			<div class="container" data-admin-customers>
+				<include src="partials/admin-nav.html" customers="1"></include>
+				<h1>Customers</h1>
+				<noscript><p>The admin needs JavaScript.</p></noscript>
+				<div class="form__status" role="status" data-admin-status></div>
+
+				<form class="admin__filters" data-admin-filters>
+					<div class="form__field">
+						<label for="customers-q">Search</label>
+						<input id="customers-q" name="q" type="search" placeholder="Email or name">
+					</div>
+					<div class="admin__filter-actions">
+						<button class="btn" type="submit">Search</button>
+					</div>
+				</form>
+
+				<table class="admin__table">
+					<caption class="visually-hidden">Customers, most recent order first</caption>
+					<thead><tr><th scope="col">Customer</th><th scope="col">Orders</th><th scope="col">Spent</th><th scope="col">Last order</th></tr></thead>
+					<tbody data-admin-rows></tbody>
+				</table>
+				<p data-admin-empty hidden>No customers match.</p>
+
+				<div class="admin__detail" data-admin-detail tabindex="-1" hidden>
+					<h2 data-admin-detail-title></h2>
+					<div class="admin__panel">
+						<h3>Orders</h3>
+						<div data-admin-customer-orders></div>
+					</div>
+					<form class="form admin__panel" data-admin-email>
+						<h3 class="form__field form__field--full">Change email</h3>
+						<p class="form__field form__field--full">Moves <strong>all</strong> of this customer's orders to the new address and emails both addresses. Only do this after confirming who you're talking to, for example the order number and the last 4 digits of the card used.</p>
+						<div class="form__field">
+							<label for="customers-new-email">New email</label>
+							<input id="customers-new-email" name="to" type="email" required maxlength="200" autocomplete="off">
+						</div>
+						<div class="form__field form__field--full">
+							<label class="admin__check"><input name="confirmed" type="checkbox" required> I've verified this person owns these orders</label>
+						</div>
+						<div class="form__field form__field--full"><button class="btn" type="submit">Change email</button></div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<include src="partials/footer.html"></include>
+</body>
+</html>

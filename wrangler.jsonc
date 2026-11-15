@@ -38,6 +38,12 @@
 		// Cloudflare Access app protecting /admin and /api/admin (Zero Trust → Access → Applications)
 		"ACCESS_TEAM_DOMAIN": "rock-paper-branding.cloudflareaccess.com", // e.g. yourteam.cloudflareaccess.com
 		"ACCESS_AUD": "fb06466388ed59b03beba7325c969994b5916bd7949da3227432e42cc7ef8c44", // the application's Audience (AUD) tag
+		// Admin users page: lets /admin edit the Access policy (README → Admin users). Needs the CF_API_TOKEN secret.
+		"CF_ACCOUNT_ID": "d79ed3e236b5ca1242b59957b84c269a",
+		"ACCESS_POLICY_ID": "e1802372-3265-4e7a-98a2-186de50bcdb2",
+		// Only used to route /login when CF_API_TOKEN isn't set; otherwise the Access policy is the list
+		"OWNER_EMAILS": "",
+		"SUPPORT_EMAIL": "autumnlanewebmaster@gmail.com", // where "Send to support" error reports from the admin go
 		"PROVIDER_EMAILS": "design@rockpaperbranding.com" // comma-separated; these admins are labelled "provider" in the audit log
 	},
 	// Cloudflare Email Routing transport (alternative to RESEND_API_KEY). Requires Email Routing

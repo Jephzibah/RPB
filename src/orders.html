@@ -10,22 +10,10 @@
 		<section id="orders">
 			<div class="container" data-orders>
 				<h1>Your orders</h1>
-				<noscript><p>Order lookup needs JavaScript. You can also reply to your order confirmation email and we'll help.</p></noscript>
+				<noscript><p>Your orders need JavaScript. You can also reply to your order confirmation email and we'll help.</p></noscript>
 
-				<form class="form orders__request" action="/api/orders/link" method="post" data-orders-request hidden>
-					<p class="form__field form__field--full">Enter the email you ordered with and we'll send you a one-time sign-in link. No password needed.</p>
-					<div class="form__field form__field--full">
-						<label for="orders-email">Email</label>
-						<input id="orders-email" name="email" type="email" autocomplete="email" required maxlength="200">
-					</div>
-					<div class="form__field form__field--full">
-						<div class="cf-turnstile" data-sitekey="{{ site.turnstile.siteKey }}" data-action="orders-lookup"></div>
-					</div>
-					<div class="form__field form__field--full">
-						<button class="btn" type="submit">Email me a link</button>
-						<p class="form__status" role="status" data-orders-status></p>
-					</div>
-				</form>
+				<p data-orders-signed-out hidden>Please <a href="/login">log in</a> to see your orders.</p>
+				<p class="form__status" role="status" data-orders-status></p>
 
 				<div class="orders__results" data-orders-results hidden>
 					<p class="orders__signed-in"><span data-orders-email></span> <button class="link-button" type="button" data-orders-logout>Sign out</button></p>

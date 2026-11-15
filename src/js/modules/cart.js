@@ -40,6 +40,14 @@ export default function initCart() {
 			else items.push({ id, name, price: Number(price), qty: 1 });
 			write(items);
 			announce(`${name} added to cart.`);
+			if (!add.nextElementSibling?.matches('[data-cart-added]')) {
+				const link = document.createElement('a');
+				link.className = 'cart-added';
+				link.href = '/cart';
+				link.dataset.cartAdded = '';
+				link.textContent = 'View cart';
+				add.after(link);
+			}
 		}
 
 		const remove = event.target.closest('[data-remove]');

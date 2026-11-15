@@ -1,6 +1,8 @@
 @use '../base/helpers' as *;
 
-#admin {
+#admin,
+#admin-customers,
+#admin-users {
 	padding-block: var(--space-section);
 
 	.admin__bar {
@@ -49,10 +51,66 @@
 
 	.admin__status { text-transform: capitalize; }
 
-	.admin__detail,
-	.admin__email {
+	.admin-nav ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: rem(8) rem(24);
+		margin: 0 0 rem(24);
+		padding: 0;
+		list-style: none;
+		a[aria-current='page'] { font-weight: 700; text-decoration: none; }
+	}
+
+	.admin__detail {
 		margin-top: var(--space-section);
 		padding: rem(24);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+	}
+
+	.admin__panel {
+		margin-top: rem(24);
+		padding-top: rem(24);
+		border-top: 1px solid var(--color-border);
+		h3 { margin-top: 0; }
+	}
+
+	.admin__panel-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: rem(12);
+	}
+
+	.admin__list { padding-left: rem(20); }
+
+	.admin__confirm {
+		padding: rem(12) rem(16);
+		border-left: 4px solid var(--color-error);
+		background: var(--color-bg);
+	}
+
+	.admin__actions {
+		flex-direction: row !important;
+		align-items: center;
+		gap: rem(16) !important;
+	}
+
+	.admin__users {
+		display: flex;
+		flex-direction: column;
+		gap: rem(8);
+		padding: 0;
+		list-style: none;
+	}
+
+	.admin__user {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: rem(12);
+		padding: rem(12) rem(16);
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius);
@@ -65,8 +123,6 @@
 		dd { flex: 0 1 75%; margin: 0 0 rem(6); overflow-wrap: anywhere; }
 	}
 
-	.admin__update,
-	.admin__note { margin-top: rem(24); }
 
 	.admin__check {
 		display: flex;
@@ -74,5 +130,24 @@
 		gap: rem(8);
 		font-weight: 400;
 		input { width: auto; }
+	}
+}
+
+.admin-error {
+	padding: rem(12) rem(16);
+	color: var(--color-text);
+	border-left: 4px solid var(--color-error);
+	background: var(--color-surface);
+
+	&__title { margin: 0 0 rem(8); font-weight: 700; color: var(--color-error); overflow-wrap: anywhere; }
+	&__actions { margin: 0 0 rem(8); }
+	&__feedback { margin-left: rem(8); color: var(--color-muted); }
+	&__details {
+		margin: rem(8) 0 0;
+		padding: rem(12);
+		overflow-x: auto;
+		font-size: rem(13);
+		white-space: pre-wrap;
+		background: var(--color-bg);
 	}
 }

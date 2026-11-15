@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<include src="partials/head.html" title="Log in" noindex="1"></include>
+</head>
+<body>
+	<include src="partials/header.html"></include>
+
+	<main id="main-content" tabindex="-1">
+		<section id="login">
+			<div class="container" data-login>
+				<h1>Log in</h1>
+				<noscript><p>Logging in needs JavaScript. You can also reply to your order confirmation email and we'll help.</p></noscript>
+
+				<form class="form login__form" action="/api/login" method="post" data-login-form hidden>
+					<p class="form__field form__field--full">Enter your email and we'll send you a one-time sign-in link to see your orders. No password needed.</p>
+					<div class="form__field form__field--full">
+						<label for="login-email">Email</label>
+						<input id="login-email" name="email" type="email" autocomplete="email" required maxlength="200">
+					</div>
+					<div class="form__field form__field--full">
+						<div class="cf-turnstile" data-sitekey="{{ site.turnstile.siteKey }}" data-action="login"></div>
+					</div>
+					<div class="form__field form__field--full">
+						<button class="btn" type="submit">Continue</button>
+						<p class="form__status" role="status" data-login-status></p>
+					</div>
+				</form>
+			</div>
+		</section>
+	</main>
+
+	<include src="partials/footer.html"></include>
+</body>
+</html>

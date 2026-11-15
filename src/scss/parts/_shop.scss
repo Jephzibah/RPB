@@ -58,3 +58,9 @@
 	&__paypal { width: 100%; }
 	&__note { color: var(--color-muted); margin: 0; }
 }
+
+.cart-added {
+	display: inline-block;
+	margin-top: rem(10);
+	font-weight: 700;
+}

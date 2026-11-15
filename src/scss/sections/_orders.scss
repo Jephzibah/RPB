@@ -1,13 +1,18 @@
 @use '../base/helpers' as *;
 
 #orders,
-#orders-verify {
+#orders-verify,
+#login {
 	padding-block: var(--space-section);
 
 	.container > * { max-width: rem(760); }
 
-	.orders__request,
+	.login__form,
 	.orders__results { margin-top: rem(24); }
+
+	.orders__subhead { margin: rem(20) 0 rem(8); font-family: var(--font-body); font-size: rem(18); }
+
+	.thread__form { margin-top: rem(12); }
 
 	.orders__list {
 		display: flex;

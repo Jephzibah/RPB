@@ -1,4 +1,4 @@
-import { HttpError, requireEnv } from './http.js';
+import { HttpError, requireEnv, emailList } from './http.js';
 import { fromBase64url } from './crypto.js';
 
 const CERTS_TTL = 60 * 60 * 1000;
@@ -25,9 +25,8 @@ async function signingKey(teamDomain, kid) {
 const decodeJson = (part) => JSON.parse(new TextDecoder().decode(fromBase64url(part)));
 
 function identity(env, email) {
-	const providers = (env.PROVIDER_EMAILS || '').split(',').map((value) => value.trim().toLowerCase()).filter(Boolean);
 	const normalized = email.toLowerCase();
-	return { email: normalized, role: providers.includes(normalized) ? 'provider' : 'owner' };
+	return { email: normalized, role: emailList(env.PROVIDER_EMAILS).includes(normalized) ? 'provider' : 'owner' };
 }
 
 /**
