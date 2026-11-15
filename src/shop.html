@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<include src="partials/head.html" title="Shop" description="Browse products."></include>
+</head>
+<body>
+	<include src="partials/header.html"></include>
+
+	<main id="main-content" tabindex="-1">
+		<section id="shop">
+			<div class="container">
+				<h1>Shop</h1>
+				<!-- Products come from catalog/products.json, the same file the Worker prices from. -->
+				<div class="products">
+					<each in="catalog.products" as="product"><include src="partials/product-card.html"></include></each>
+				</div>
+
+				<h2>Single-product shortcut</h2>
+				<p>For a handful of products with no cart, paste a Stripe Payment Link or PayPal hosted button instead of the cart:</p>
+				<p><a class="btn btn--hollow" href="https://buy.stripe.com/test_XXXXXXXX">Buy now with Stripe (Payment Link)</a></p>
+			</div>
+		</section>
+	</main>
+
+	<include src="partials/footer.html"></include>
+</body>
+</html>

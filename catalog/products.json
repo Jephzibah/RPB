@@ -1,0 +1,22 @@
+{
+	"currency": "usd",
+	"shippingCountries": ["US"],
+	"products": [
+		{
+			"id": "sample-print",
+			"name": "Sample Art Print",
+			"description": "12×16 giclée print on archival paper.",
+			"price": 4500,
+			"image": "/assets/images/sample-print.jpg",
+			"stripePriceId": ""
+		},
+		{
+			"id": "sample-mug",
+			"name": "Sample Mug",
+			"description": "11 oz ceramic mug, dishwasher safe.",
+			"price": 1800,
+			"image": "/assets/images/sample-mug.jpg",
+			"stripePriceId": ""
+		}
+	]
+}

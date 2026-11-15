@@ -1,0 +1,9 @@
+// Build-time values only. Anything a client might re-theme lives in _tokens.scss as CSS custom properties.
+$breakpoints: (
+	sm: 576px,
+	md: 768px,
+	lg: 992px,
+	xl: 1200px,
+);
+$container: 1200px;
+$ease-out: cubic-bezier(0.19, 1, 0.22, 1);

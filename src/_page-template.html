@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<!--
+	Copy to src/<page-name>.html — it becomes /<page-name>. Files starting with "_" are not built.
+	Each <section> gets a unique id; style it in scss/sections/ (page sections) or scss/parts/ (shared components).
+-->
+<html lang="en">
+<head>
+	<include src="partials/head.html" title="Page Title" description="One or two sentences for search results."></include>
+</head>
+<body>
+	<include src="partials/header.html"></include>
+
+	<main id="main-content" tabindex="-1">
+		<section id="page-intro">
+			<div class="container">
+				<h1>Page Title</h1>
+				<p>Content goes here.</p>
+			</div>
+		</section>
+	</main>
+
+	<include src="partials/footer.html"></include>
+</body>
+</html>

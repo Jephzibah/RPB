@@ -1,0 +1,16 @@
+@use '../base/helpers' as *;
+
+#hero {
+	background: var(--color-surface);
+	.hero__inner {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--gutter);
+		align-items: center;
+		> * { flex: 0 1 100%; }
+		@include up(lg) { > * { flex: 0 1 calc(50% - var(--gutter) / 2); } }
+	}
+	.hero__image img { border-radius: var(--radius); }
+}
+
+#testimonials { background: var(--color-surface); }

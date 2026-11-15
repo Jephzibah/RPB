@@ -1,0 +1,15 @@
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header id="site-header">
+	<nav class="nav container" aria-label="Primary" data-nav>
+		<a class="nav__brand" href="/">{{ site.name }}</a>
+		<button class="nav__toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+			<span class="visually-hidden">Menu</span>
+			<span class="nav__burger" aria-hidden="true"></span>
+		</button>
+		<ul id="primary-nav" class="nav__links">
+			{{ nav }}
+			<if feature="shop"><li><a class="nav__cart" href="/cart">Cart <span class="nav__cart-count" data-cart-count>0</span><span class="visually-hidden"> items</span></a></li></if>
+		</ul>
+	</nav>
+	<if feature="shop"><div class="visually-hidden" aria-live="polite" data-cart-announcer></div></if>
+</header>

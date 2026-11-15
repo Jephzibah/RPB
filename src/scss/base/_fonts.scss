@@ -1,0 +1,19 @@
+// One family name per typeface, real weight/style descriptors, woff2 only.
+// Only weights actually used are declared – unused @font-face rules still cost nothing to download,
+// but unused files in the repo do. Lato-Regular & Playfair are preloaded in partials/head.html.
+@mixin face($family, $file, $weight: 400, $style: normal) {
+	@font-face {
+		font-family: $family;
+		src: url('/assets/fonts/#{$file}.woff2') format('woff2');
+		font-weight: $weight;
+		font-style: $style;
+		font-display: swap;
+	}
+}
+
+@include face('Lato', 'Lato-Light', 300);
+@include face('Lato', 'Lato-LightItalic', 300, italic);
+@include face('Lato', 'Lato-Regular', 400);
+@include face('Lato', 'Lato-Italic', 400, italic);
+@include face('Lato', 'Lato-Bold', 700);
+@include face('Playfair Display', 'PlayfairDisplay-Regular', 400);

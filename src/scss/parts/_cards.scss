@@ -1,0 +1,18 @@
+@use '../base/helpers' as *;
+
+.cards {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--gutter);
+	> * { flex: 0 1 100%; }
+	@include up(md) { > * { flex: 0 1 calc(33.333% - var(--gutter) * 2 / 3); } }
+}
+
+.card {
+	padding: rem(24);
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	p:last-child { margin-bottom: 0; }
+}

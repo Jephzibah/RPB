@@ -1,0 +1,41 @@
+{
+	"name": "starter-static",
+	"private": true,
+	"version": "1.0.0",
+	"type": "module",
+	"engines": {
+		"node": ">=20.19"
+	},
+	"scripts": {
+		"predev": "node -e \"require('fs').mkdirSync('dist',{recursive:true})\"",
+		"dev": "concurrently -k -n site,api -c cyan,magenta \"vite --mode dev\" \"wrangler dev --port 8787\"",
+		"dev:site": "vite --mode dev",
+		"build": "vite build",
+		"preview": "npm run build && wrangler dev --port 8787",
+		"deploy": "npm run build && wrangler deploy",
+		"axe:report": "node plugins/axe-reporter.js",
+		"check": "npm run build && npm run axe:report"
+	},
+	"browserslist": [
+		"last 2 Chrome versions",
+		"last 2 Firefox versions",
+		"last 2 Safari versions",
+		"last 2 Edge versions",
+		"last 2 iOS versions",
+		"last 2 ChromeAndroid versions",
+		"> 0.5%",
+		"not dead"
+	],
+	"devDependencies": {
+		"@axe-core/cli": "^4.14.0",
+		"@fortawesome/fontawesome-free": "^7.3.1",
+		"autoprefixer": "^10.6.2",
+		"concurrently": "^10.0.7",
+		"glob": "^14.0.6",
+		"postcss": "^8.5.33",
+		"sass-embedded": "^1.108.2",
+		"sharp": "^0.35.5",
+		"vite": "^8.3.8",
+		"wrangler": "^4.162.0"
+	}
+}

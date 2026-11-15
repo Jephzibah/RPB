@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<include src="partials/head.html" description="Home page description for search results and social shares."></include>
+</head>
+<body>
+	<include src="partials/header.html"></include>
+
+	<main id="main-content" tabindex="-1">
+		<section id="hero" class="hero">
+			<div class="container hero__inner">
+				<div class="hero__copy">
+					<h1>A fast, accessible starting point</h1>
+					<p>Static pages, global components, and optional forms and checkout — served from Cloudflare's edge.</p>
+					<p><a class="btn" href="/contact">Get in touch</a></p>
+				</div>
+				<div class="hero__image">
+					<img src="/assets/images/hero.jpg" alt="Abstract gradient artwork" sizes="(min-width: 992px) 50vw, 100vw" data-eager>
+				</div>
+			</div>
+		</section>
+
+		<section id="features">
+			<div class="container">
+				<h2>What's included</h2>
+				<div class="cards">
+					<div class="card" data-reveal>
+						<h3><i class="fa-solid fa-layer-group"></i> Build-time partials</h3>
+						<p>Header, footer and meta tags are assembled when you build, so pages work without JavaScript and search engines see everything.</p>
+					</div>
+					<div class="card" data-reveal>
+						<h3><i class="fa-solid fa-image"></i> Optimized media</h3>
+						<p>Images become AVIF/WebP at several sizes with dimensions set, so nothing jumps while loading.</p>
+					</div>
+					<div class="card" data-reveal>
+						<h3><i class="fa-brands fa-cloudflare"></i> Edge API</h3>
+						<p>Contact form, Stripe and PayPal checkout run in a tiny Cloudflare Worker on the same domain. No PHP, no servers.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="testimonials">
+			<div class="container">
+				<h2>Kind words</h2>
+				<div class="carousel" role="region" aria-roledescription="carousel" aria-label="Testimonials" data-carousel data-interval="6000">
+					<figure class="carousel__slide" data-slide>
+						<blockquote>“Our new site loads instantly and we finally get leads from the contact form.”</blockquote>
+						<figcaption>— Client One, Small Business</figcaption>
+					</figure>
+					<figure class="carousel__slide" data-slide>
+						<blockquote>“Selling online took an afternoon to set up.”</blockquote>
+						<figcaption>— Client Two, Shop Owner</figcaption>
+					</figure>
+					<figure class="carousel__slide" data-slide>
+						<blockquote>“Easy to update and it just works.”</blockquote>
+						<figcaption>— Client Three, Studio</figcaption>
+					</figure>
+				</div>
+			</div>
+		</section>
+
+		<section id="faq">
+			<div class="container">
+				<h2>FAQ</h2>
+				<!-- Native exclusive accordion: same `name` = only one open at a time. No JS needed. -->
+				<div class="accordion">
+					<details name="faq">
+						<summary>How do I add a page?</summary>
+						<div class="accordion__answer"><p>Copy <code>src/_page-template.html</code> to <code>src/my-page.html</code>. It's picked up automatically.</p></div>
+					</details>
+					<details name="faq">
+						<summary>Where do secrets go?</summary>
+						<div class="accordion__answer"><p>Never in the repo. Use <code>wrangler secret put</code> (production) or <code>.dev.vars</code> (local).</p></div>
+					</details>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<include src="partials/footer.html"></include>
+</body>
+</html>

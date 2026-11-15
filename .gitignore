@@ -1,0 +1,16 @@
+# build
+node_modules
+dist
+src/assets/generated
+
+# cloudflare
+.wrangler
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+# reports (regenerated on each run)
+reports/axe-results.json
+
+# garbage
+.DS_Store

@@ -1,0 +1,50 @@
+@use '../base/helpers' as *;
+
+// Without JS every slide is listed. js/modules/carousel.js adds [data-enhanced] and stacks them.
+.carousel {
+	&__slide {
+		margin: 0 0 rem(24);
+		blockquote {
+			margin: 0 0 rem(12);
+			font-family: var(--font-heading);
+			font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+		}
+		figcaption { color: var(--color-muted); }
+	}
+
+	&[data-enhanced] {
+		display: grid;
+		.carousel__slide {
+			grid-area: 1 / 1;
+			margin: 0;
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 0.6s ease, visibility 0.6s;
+			&.is-active { opacity: 1; visibility: visible; }
+		}
+	}
+
+	&__dots {
+		display: flex;
+		gap: rem(4);
+		margin-top: rem(16);
+	}
+	&__dot {
+		width: rem(24);
+		height: rem(24);
+		padding: 0;
+		background: none;
+		border: 0;
+		cursor: pointer;
+		&::before {
+			content: '';
+			display: block;
+			width: rem(10);
+			height: rem(10);
+			margin: auto;
+			border-radius: 50%;
+			background: var(--color-border);
+		}
+		&[aria-current='true']::before { background: var(--color-primary); }
+	}
+}

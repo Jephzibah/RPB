@@ -1,0 +1,18 @@
+# Copy to .dev.vars for `npm run dev` (never commit .dev.vars).
+# Production: `npx wrangler secret put NAME` for each.
+
+# Cloudflare Turnstile test secret: always passes. (2x0000000000000000000000000000000AA always fails.)
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+
+# Log emails to the terminal instead of sending them
+EMAIL_DEV_LOG=1
+# RESEND_API_KEY=re_...
+
+# Stripe test mode keys: https://dashboard.stripe.com/test/apikeys
+STRIPE_SECRET_KEY=sk_test_...
+# From `stripe listen --forward-to localhost:8787/api/webhooks/stripe`
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# PayPal sandbox app: https://developer.paypal.com/dashboard/applications/sandbox
+PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=

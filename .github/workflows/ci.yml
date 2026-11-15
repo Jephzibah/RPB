@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run axe:report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: axe-report
+          path: reports/axe-results.json
+
+  # Deployment: preferred route is Cloudflare "Workers Builds" (dashboard → Workers → Connect to Git),
+  # which builds/deploys on push and creates preview URLs per branch with no secrets in GitHub.
+  # If you'd rather deploy from Actions, uncomment and add CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID secrets.
+  # deploy:
+  #   needs: build
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-node@v4
+  #       with: { node-version-file: .nvmrc, cache: npm }
+  #     - run: npm ci && npm run build
+  #     - uses: cloudflare/wrangler-action@v3
+  #       with:
+  #         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  #         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

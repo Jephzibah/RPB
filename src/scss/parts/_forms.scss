@@ -1,0 +1,39 @@
+@use '../base/helpers' as *;
+
+.form {
+	display: flex;
+	flex-wrap: wrap;
+	gap: rem(16);
+
+	&__field {
+		display: flex;
+		flex-direction: column;
+		gap: rem(6);
+		flex: 0 1 100%;
+		@include up(sm) { flex: 0 1 calc(50% - #{rem(8)}); }
+		&--full { flex: 0 1 100% !important; }
+	}
+
+	label { font-weight: 700; }
+	&__optional { font-weight: 400; color: var(--color-muted); }
+
+	input, textarea, select {
+		width: 100%;
+		padding: rem(10) rem(12);
+		font: inherit;
+		color: var(--color-text);
+		background: var(--color-surface);
+		border: 1px solid var(--color-muted);
+		border-radius: var(--radius);
+		&[aria-invalid='true'] { border-color: var(--color-error); }
+	}
+
+	&__honeypot { position: absolute; left: -9999px; }
+
+	&__status {
+		min-height: 1.6em;
+		margin: rem(12) 0 0;
+		&[data-state='success'] { color: var(--color-success); }
+		&[data-state='error'] { color: var(--color-error); }
+	}
+}

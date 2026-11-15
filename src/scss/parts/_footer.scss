@@ -1,0 +1,28 @@
+@use '../base/helpers' as *;
+
+#site-footer {
+	padding-block: rem(48);
+	color: var(--color-primary-contrast);
+	background: var(--color-primary);
+
+	a { color: inherit; }
+}
+
+.footer {
+	display: flex;
+	flex-wrap: wrap;
+	gap: rem(16) rem(32);
+	align-items: center;
+	justify-content: space-between;
+
+	&__brand { font-family: var(--font-heading); font-size: rem(22); margin: 0; }
+	&__links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: rem(8) rem(24);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	&__legal { flex: 0 1 100%; margin: 0; font-size: rem(14); opacity: 0.8; }
+}

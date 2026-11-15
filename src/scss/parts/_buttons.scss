@@ -1,0 +1,33 @@
+@use '../base/helpers' as *;
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em;
+	padding: 0.85em 1.5em;
+	font: inherit;
+	font-weight: 700;
+	line-height: 1.2;
+	letter-spacing: 0.02em;
+	text-decoration: none;
+	color: var(--color-primary-contrast);
+	background: var(--color-primary);
+	border: 2px solid var(--color-primary);
+	border-radius: var(--radius-pill);
+	cursor: pointer;
+	transition: background-color 0.3s $ease-out, color 0.3s $ease-out, transform 0.3s $ease-out;
+
+	&:hover {
+		color: var(--color-primary);
+		background: transparent;
+		transform: translateY(-2px);
+	}
+	&:disabled { opacity: 0.6; cursor: progress; transform: none; }
+
+	&--hollow {
+		color: var(--color-primary);
+		background: transparent;
+		&:hover { color: var(--color-primary-contrast); background: var(--color-primary); }
+	}
+}
