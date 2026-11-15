@@ -45,7 +45,7 @@ async function adminUser(request, env) {
 	requireFeature('shop');
 	requireEnv(env, 'DB');
 	const actor = await requireAdmin(request, env);
-	if (!configured(env)) throw new HttpError(503, 'Admin user management isn’t set up yet (see README → Admin users).');
+	if (!configured(env)) throw new HttpError(503, 'Admin user management isn’t set up yet (see README → Orders → Setup).');
 	return actor;
 }
 
