@@ -3,24 +3,6 @@ import { existsSync, statSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 
-/**
- * Responsive images, generated at build/dev time from originals in src/assets/images.
- * Evolved from Starter-LP2025's webp-converter.js.
- *
- *   <img src="/assets/images/hero.jpg" alt="…" data-eager>
- * becomes
- *   <picture>
- *     <source type="image/avif" srcset="…-480.avif 480w, …" sizes="100vw">
- *     <img src="…-960.webp" srcset="…-480.webp 480w, …" sizes="100vw" width="2400" height="1600"
- *          alt="…" loading="eager" fetchpriority="high" decoding="async">
- *   </picture>
- *
- * - width/height are always written (prevents layout shift); CSS keeps `height: auto`.
- * - `loading="lazy"` by default; add `data-eager` to the LCP/hero image.
- * - Pass `sizes="(min-width: 768px) 50vw, 100vw"` on the <img> when it isn't full-width.
- * - Opt out with `data-no-optimize` (SVG/GIF and remote images are skipped automatically).
- * - Output goes to src/assets/generated (gitignored, cached by mtime) and is then hashed by Vite.
- */
 const WIDTHS = [480, 960, 1440, 1920];
 const MAX_WIDTH = 2400;
 const SUPPORTED = /\.(jpe?g|png|webp|avif|tiff?)$/i;

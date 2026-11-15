@@ -1,6 +1,5 @@
 const loaded = new Map();
 
-/** Inject a third-party <script> once; resolves when it has loaded. */
 export function loadScript(src, attrs = {}) {
 	if (!loaded.has(src)) {
 		loaded.set(

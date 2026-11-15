@@ -1,4 +1,3 @@
-// Mobile menu. Without JS the links simply stay visible (see parts/_nav.scss).
 export default function initNav() {
 	const nav = document.querySelector('[data-nav]');
 	const toggle = nav?.querySelector('[data-nav-toggle]');

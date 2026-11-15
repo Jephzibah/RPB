@@ -22,7 +22,7 @@ npm run dev                  # site on :3000 (hot reload) + Worker API on :8787
 | `npm run dev` | Vite dev server + `wrangler dev` for `/api/*` (proxied) |
 | `npm run build` | Production build to `dist/`, which is a checkout of the `prod` branch: each build replaces `prod` with exactly that output and force-pushes it (skipped in CI) |
 | `npm run preview` | Build, then serve `dist/` and the Worker exactly as Cloudflare will |
-| `npm run check` | Build + axe accessibility audit of every page → `reports/axe-results.json` |
+| `npm run check` | Build + axe accessibility audit of every page → `reports/axe-results.json` + a readable `reports/axe/<page>.txt` per page |
 | `npm run deploy` | Build + `wrangler deploy` |
 
 ## How it fits together
@@ -31,7 +31,7 @@ npm run dev                  # site on :3000 (hot reload) + Worker API on :8787
 site.config.js         name, URL, nav, feature switches, analytics, public keys
 catalog/products.json  products & prices: rendered by the build AND trusted by the Worker
 src/
-  *.html               pages (about.html → /about). _*.html are not built.
+  *.html               pages (about.html → /about, shop/x.html → /shop/x). _*.html are not built.
   partials/            head, header, footer, contact-form, product-card
   scss/                base/ (tokens, fonts, mixins, globals) · parts/ (components) · sections/ (page sections)
   js/main.js           always-on modules + lazy-loaded ones (carousel, contact form, cart)
@@ -53,7 +53,7 @@ worker/                /api/contact, /api/checkout/stripe, /api/webhooks/stripe,
 <include src="partials/header.html"></include>
 
 {{ title || site.name }}   {{ page.url }}   {{ year }}   {{ nav }}
-<if feature="shop">…</if>   <if set="site.analytics.ga4">…</if>   <if not="hideCta">…</if>
+<if feature="shop">…</if>   <if set="site.analytics.gtm">…</if>   <if not="hideCta">…</if>
 <each in="catalog.products" as="product"><include src="partials/product-card.html"></include></each>
 ```
 
@@ -76,7 +76,7 @@ Write normal Font Awesome markup (`<i class="fa-solid fa-code"></i>`). The build
 ## New client site checklist
 
 1. On GitHub, open this repo → **Use this template** → create `client-site`. One repo per site; don't use branches for different sites.
-2. `site.config.js`: set name, URL, description, nav and theme color, and turn off features the site doesn't need (`shop`, `paypal`, …).
+2. `site.config.js`: set name, URL, `hosting`, description, nav and theme color, and turn off features the site doesn't need (`shop`, `paypal`, …).
 3. `wrangler.jsonc`: set `name` and update `vars` (`CONTACT_TO`, `EMAIL_FROM`).
 4. Re-theme in `src/scss/base/_tokens.scss` and `_fonts.scss`. Add woff2 files for only the weights you use, and update the two preloads in `partials/head.html`.
 5. Replace `src/public/favicon.svg`, `apple-touch-icon.png` and `og-image.jpg` (1200×630).
@@ -94,7 +94,21 @@ Write normal Font Awesome markup (`<i class="fa-solid fa-code"></i>`). The build
    - Cloudflare Email Routing: enable it on the domain, verify `CONTACT_TO` as a destination, and uncomment `send_email` in `wrangler.jsonc`.
 6. Optional: turn on Web Analytics (cookieless) and paste the token into `site.config.js`. Add a rate-limiting rule for `/api/*` under Security → WAF.
 
-**Moving a site off GitHub Pages:** deploy to Cloudflare first and test it on the `*.workers.dev` URL. Then add the custom domain to the Worker; this replaces the old GitHub Pages DNS records. Finally, turn off Pages in the GitHub repo settings and delete the `CNAME` file.
+**Moving a site off GitHub Pages:** deploy to Cloudflare first and test it on the `*.workers.dev` URL. Then add the custom domain to the Worker; this replaces the old GitHub Pages DNS records. Finally, set `hosting: 'cloudflare'`, turn off Pages in the GitHub repo settings and delete the `CNAME` file.
+
+## Hosting
+
+Set `hosting` in `site.config.js`. Everything that depends on the host follows from it:
+
+| | `cloudflare` | `github-pages` | `static` (any other host) |
+| --- | --- | --- | --- |
+| Base path | `/` | `/<repo>/` from the git remote (`/` with a `CNAME` file or a `<user>.github.io` repo) | `/` |
+| Contact form, shop, checkout | on (Worker runs `/api/*`) | off | off |
+| CSP | `_headers` file, plus HSTS, `nosniff`, framing and caching headers | `<meta>` tag only | `<meta>` tag only |
+| Page links | `/about` | `/<repo>/about` | `/about.html` |
+| Extra files | `_headers` | `.nojekyll` | none |
+
+`base` overrides the automatic base path. Canonical links, `og:image` and the sitemap use `url` + base path, so set `url` to the origin of whichever host is live.
 
 ## E-commerce
 
@@ -123,10 +137,10 @@ stripe listen --forward-to localhost:8787/api/webhooks/stripe   # prints whsec_�
 
 ## Security headers
 
-`plugins/site-files.js` writes `dist/_headers`:
+With `hosting: 'cloudflare'`, `plugins/site-files.js` writes `dist/_headers` (other hosts get the CSP as a `<meta>` tag; they can't set the other headers):
 
-- a CSP that allows only the third-party origins your enabled features need (Turnstile, Stripe, PayPal, analytics)
+- a CSP that allows only the third-party origins your enabled features need (Turnstile, Stripe, PayPal, Cloudflare Web Analytics, Google Tag Manager)
 - HSTS, `nosniff`, `X-Frame-Options`, `Referrer-Policy` and `Permissions-Policy`
 - one-year immutable caching for `/assets/*` (the filenames are content-hashed)
 
-For an extra origin (e.g. an embed), add `csp: { script: ['https://…'], frame: [...] }` to `site.config.js`.
+For an extra origin (e.g. an embed, or a tag your GTM container loads beyond GA4), add `csp: { script: ['https://…'], frame: [...] }` to `site.config.js`.

@@ -1,0 +1,26 @@
+@use '../base/helpers' as *;
+
+#about-intro {
+	padding-top: fluid(16, 24);
+
+	.split { align-items: flex-start; }
+
+	.about-intro__text {
+		@include up(md) { flex: 0 1 calc(62% - var(--gutter) / 2); }
+		padding-left: fluid(0, 32);
+	}
+	.about-intro__photo {
+		padding: rem(24) fluid(24, 48);
+		@include up(md) { flex: 0 1 calc(38% - var(--gutter) / 2); }
+		@include up(lg) { margin-top: rem(-60); }
+	}
+}
+
+#rodeo {
+	padding-block: fluid(16, 40) fluid(48, 100);
+
+	h2 {
+		margin-bottom: fluid(20, 40);
+		font-size: fluid(44, 84);
+	}
+}

@@ -2,7 +2,6 @@ import { HttpError, json, requireFeature, requireEnv, readJson } from './http.js
 import { resolveCart } from './catalog.js';
 import { sendEmail } from './email.js';
 
-// PayPal Orders v2: https://developer.paypal.com/docs/api/orders/v2/
 const apiBase = (env) => (env.PAYPAL_ENV === 'live' ? 'https://api-m.paypal.com' : 'https://api-m.sandbox.paypal.com');
 
 // Assumes a 2-decimal currency (USD, EUR, GBP…). Zero-decimal currencies (JPY) need adjusting.
@@ -38,7 +37,6 @@ async function paypal(env, path, body) {
 	return data;
 }
 
-/** POST {items:[{id, qty}]} → {id} PayPal order id (consumed by the JS SDK buttons) */
 export async function createPayPalOrder(request, env) {
 	requireFeature('paypal');
 	requireEnv(env, 'PAYPAL_CLIENT_ID', 'PAYPAL_CLIENT_SECRET');

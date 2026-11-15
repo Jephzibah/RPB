@@ -1,4 +1,3 @@
-// https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
 export async function verifyTurnstile(token, ip, secret) {
 	if (!token || typeof token !== 'string') return false;
 	const body = new FormData();

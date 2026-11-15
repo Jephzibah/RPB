@@ -1,21 +1,29 @@
 {
 	"currency": "usd",
-	"shippingCountries": ["US"],
+	"shippingCountries": [],
 	"products": [
 		{
-			"id": "sample-print",
-			"name": "Sample Art Print",
-			"description": "12×16 giclée print on archival paper.",
-			"price": 4500,
-			"image": "/assets/images/sample-print.jpg",
+			"id": "business-branding",
+			"name": "Business Branding",
+			"description": "A complete brand identity: main logo, two alternate logos, color palette, typography and brand guidelines.",
+			"price": 150000,
+			"image": "/assets/images/product-business-branding.jpg",
 			"stripePriceId": ""
 		},
 		{
-			"id": "sample-mug",
-			"name": "Sample Mug",
-			"description": "11 oz ceramic mug, dishwasher safe.",
-			"price": 1800,
-			"image": "/assets/images/sample-mug.jpg",
+			"id": "website-design",
+			"name": "Website Design",
+			"description": "A custom, strategy-driven website designed and built around your brand.",
+			"price": 250000,
+			"image": "/assets/images/product-website-design.jpg",
+			"stripePriceId": ""
+		},
+		{
+			"id": "business-email",
+			"name": "Business Email",
+			"description": "Professional email on your own domain, set up for you.",
+			"price": 1500,
+			"image": "/assets/images/product-business-email.jpg",
 			"stripePriceId": ""
 		}
 	]

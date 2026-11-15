@@ -3,12 +3,7 @@ import { handleContact } from './lib/contact.js';
 import { createStripeCheckout, handleStripeWebhook } from './lib/stripe.js';
 import { createPayPalOrder, capturePayPalOrder } from './lib/paypal.js';
 
-/**
- * Same-domain API for the static site. Only /api/* reaches this code (see wrangler.jsonc
- * `run_worker_first`); every other request is served straight from dist/ by Cloudflare.
- *
- * [method, path pattern, handler, options]
- */
+// Only /api/* reaches this code (wrangler.jsonc `run_worker_first`). Routes: [method, path pattern, handler, options]
 const routes = [
 	['POST', /^\/api\/contact$/, handleContact],
 	['POST', /^\/api\/checkout\/stripe$/, createStripeCheckout],

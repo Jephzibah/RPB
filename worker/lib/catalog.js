@@ -3,10 +3,7 @@ import { HttpError } from './http.js';
 
 export const currency = catalog.currency.toLowerCase();
 
-/**
- * Turns a client cart ([{id, qty}]) into priced lines using the server-side catalog.
- * Client-sent names/prices are ignored entirely.
- */
+// Client-sent names/prices are ignored entirely; prices come from the server-side catalog.
 export function resolveCart(items) {
 	if (!Array.isArray(items) || items.length === 0 || items.length > 50) throw new HttpError(400, 'Your cart is empty.');
 

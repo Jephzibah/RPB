@@ -4,12 +4,12 @@
 		<img src="{{ product.image }}" alt="{{ product.name }}" sizes="(min-width: 768px) 33vw, 100vw">
 	</div>
 	<div class="product__body">
-		<h2 class="product__name">{{ product.name }}</h2>
+		<h2 class="product__name"><a href="/shop/{{ product.id }}">{{ product.name }}</a></h2>
 		<p class="product__description">{{ product.description }}</p>
 		<p class="product__price">{{ product.priceDisplay }}</p>
-		<button class="btn" type="button"
+		<if feature="shop"><button class="btn" type="button"
 			data-add-to-cart="{{ product.id }}"
 			data-name="{{ product.name }}"
-			data-price="{{ product.price }}">Add to cart</button>
+			data-price="{{ product.price }}">Add to cart</button></if>
 	</div>
 </article>

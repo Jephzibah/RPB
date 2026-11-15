@@ -1,0 +1,18 @@
+<!-- Expects a `product` from <each in="catalog.single.<id>" as="product"> -->
+<section id="product">
+	<div class="container product-detail">
+		<div class="product-detail__image">
+			<img src="{{ product.image }}" alt="" sizes="(min-width: 768px) 50vw, 100vw" data-eager>
+		</div>
+		<div class="product-detail__body">
+			<p class="product-detail__back"><a href="/shop">Back to shop</a></p>
+			<h1>{{ product.name }}</h1>
+			<p>{{ product.description }}</p>
+			<p class="product-detail__price">{{ product.priceDisplay }}</p>
+			<if feature="shop"><button class="btn" type="button"
+				data-add-to-cart="{{ product.id }}"
+				data-name="{{ product.name }}"
+				data-price="{{ product.price }}">Add to cart</button></if>
+		</div>
+	</div>
+</section>

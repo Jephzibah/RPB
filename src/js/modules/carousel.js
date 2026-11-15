@@ -1,11 +1,5 @@
 import { prefersReducedMotion } from './util.js';
 
-/**
- * <div data-carousel data-interval="6000" role="region" aria-roledescription="carousel" aria-label="…">
- *   <figure data-slide>…</figure> …
- * </div>
- * Autoplay pauses on hover/focus/hidden tab and is disabled for reduced-motion users.
- */
 export default function initCarousels() {
 	document.querySelectorAll('[data-carousel]').forEach(setup);
 }

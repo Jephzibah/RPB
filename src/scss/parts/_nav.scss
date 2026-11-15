@@ -1,35 +1,36 @@
 @use '../base/helpers' as *;
 
 #site-header {
-	position: sticky;
-	top: 0;
+	position: relative;
 	z-index: 100;
-	background: var(--color-surface);
-	border-bottom: 1px solid var(--color-border);
+	padding-top: fluid(12, 27);
+	background: var(--color-bg);
 }
 
 .nav {
 	display: flex;
 	flex-wrap: wrap;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: space-between;
 	gap: rem(16);
-	min-height: rem(72);
 
 	&__brand {
-		font-family: var(--font-heading);
-		font-size: rem(24);
-		text-decoration: none;
-		color: var(--color-text);
+		flex: 0 0 auto;
+		img { width: fluid(130, 184); }
 	}
 
 	&__links {
 		display: flex;
 		flex-wrap: wrap;
-		gap: rem(8) rem(24);
+		justify-content: flex-end;
+		gap: rem(8) fluid(16, 26);
 		margin: 0;
 		padding: 0;
 		list-style: none;
+		font-size: rem(15);
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		@include up(lg) { font-size: fluid(15, 18); }
 
 		a {
 			text-decoration: none;
@@ -80,6 +81,7 @@
 
 	// Collapsed mobile menu only once JS has enhanced the nav (links stay visible without JS)
 	@include down(md) {
+		align-items: center;
 		&[data-enhanced] &__toggle { display: block; }
 		&[data-enhanced] &__links {
 			display: none;

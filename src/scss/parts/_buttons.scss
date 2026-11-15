@@ -5,16 +5,17 @@
 	align-items: center;
 	justify-content: center;
 	gap: 0.5em;
-	padding: 0.85em 1.5em;
+	min-width: fluid(180, 284);
+	padding: 0.6em 1.5em;
 	font: inherit;
-	font-weight: 700;
+	font-size: fluid(18, 28);
 	line-height: 1.2;
-	letter-spacing: 0.02em;
+	letter-spacing: 0.04em;
 	text-decoration: none;
 	color: var(--color-primary-contrast);
 	background: var(--color-primary);
 	border: 2px solid var(--color-primary);
-	border-radius: var(--radius-pill);
+	border-radius: rem(6);
 	cursor: pointer;
 	transition: background-color 0.3s $ease-out, color 0.3s $ease-out, transform 0.3s $ease-out;
 

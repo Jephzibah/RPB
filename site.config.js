@@ -1,34 +1,34 @@
-// Single source of truth for per-site settings.
 // Everything here is PUBLIC (it ends up in HTML). Secrets go in `wrangler secret put` / .dev.vars.
 export default {
-	name: 'Site Name',
-	url: 'https://example.com', // production origin, no trailing slash
-	base: '/', // path the site is served from: '/' at a domain root, '/<repo>/' on GitHub Pages project sites
+	name: 'Rock Paper Branding',
+	url: 'https://example.com', // origin the site is served from, no path or trailing slash
+	// 'cloudflare' | 'github-pages' | 'static'. Only Cloudflare runs the Worker, so contact & shop switch off elsewhere.
+	hosting: 'github-pages',
+	base: '', // empty = automatic ('/<repo>/' on GitHub Pages, else '/'). Set '/' for a GitHub Pages custom domain.
 	lang: 'en',
-	description: 'Default meta description used when a page does not set its own.',
-	ogImage: '/og-image.jpg', // lives in src/public, made absolute at build time
-	twitterHandle: '', // e.g. '@handle'
-	themeColor: '#13144a',
-	iconCredit: true, // Font Awesome Free (CC BY 4.0) credit in the footer; set false if no icons are used
+	description: 'Rock Paper Branding is a full-service brand and website design studio for small businesses.',
+	ogImage: '/og-image.jpg',
+	twitterHandle: '',
+	themeColor: '#323232',
+	iconCredit: false, // Font Awesome Free (CC BY 4.0) credit in the footer; set false if no icons are used
 
 	nav: [
-		{ label: 'Home', href: '/' },
+		{ label: 'Brand Design', href: '/brand-design' },
 		{ label: 'About', href: '/about' },
 		{ label: 'Shop', href: '/shop', feature: 'shop' },
 		{ label: 'Contact', href: '/contact', feature: 'contact' },
 	],
 
-	// Feature switches. Turning one off removes its nav links, <if> blocks and CSP allowances.
 	features: {
-		contact: true, // /api/contact + Cloudflare Turnstile
-		shop: true, // cart + checkout endpoints
+		contact: true,
+		shop: true,
 		stripe: true, // requires features.shop
 		paypal: true, // requires features.shop
 	},
 
 	analytics: {
-		cloudflareToken: '', // Cloudflare Web Analytics (cookieless). Preferred.
-		ga4: '', // 'G-XXXXXXX' – only if the client insists; needs a consent banner in the EU/UK.
+		cloudflareToken: '',
+		gtm: '', // 'GTM-XXXXXXX'. Needs a consent banner in the EU/UK; tags beyond GA4 need `csp` entries.
 	},
 
 	turnstile: {

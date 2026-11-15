@@ -1,0 +1,41 @@
+@use '../base/helpers' as *;
+
+#product {
+	padding-top: fluid(32, 60);
+
+	.product-detail {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--gutter);
+		align-items: center;
+		> * { flex: 0 1 100%; }
+		@include up(md) {
+			> * { flex: 0 1 calc(50% - var(--gutter) / 2); }
+		}
+	}
+
+	h1 { font-size: fluid(44, 84); }
+
+	.product-detail__back {
+		font-size: rem(16);
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
+
+	.product-detail__price {
+		font-size: fluid(22, 32);
+	}
+}
+
+#product-details {
+	padding-block: fluid(16, 40) fluid(48, 80);
+
+	h2 {
+		margin-bottom: fluid(20, 40);
+		font-size: fluid(44, 84);
+	}
+	ul {
+		margin: 0 0 1em;
+		padding-left: 1.2em;
+	}
+}

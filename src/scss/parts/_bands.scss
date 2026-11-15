@@ -1,0 +1,39 @@
+@use '../base/helpers' as *;
+
+.band {
+	position: relative;
+	margin-block: var(--wave-height);
+	background: var(--band-color);
+
+	&::before,
+	&::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		height: var(--wave-height);
+		background: var(--band-color);
+		mask: center / 100% 100% no-repeat;
+		pointer-events: none;
+	}
+	// Overlap by 1px so no hairline shows between the wave and the band at fractional zoom levels
+	&::before {
+		bottom: calc(100% - 1px);
+		mask-image: url('/assets/images/wave-top.svg');
+	}
+	&::after {
+		top: calc(100% - 1px);
+		mask-image: url('/assets/images/wave-bottom.svg');
+	}
+
+	&--dark {
+		--band-color: var(--color-charcoal);
+		color: var(--color-white);
+		a { color: inherit; }
+		:focus-visible { outline-color: var(--color-white); }
+	}
+
+	&--light {
+		--band-color: var(--color-white);
+	}
+}

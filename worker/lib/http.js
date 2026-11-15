@@ -21,7 +21,6 @@ export function isSameOrigin(request, url) {
 	return !fetchSite || fetchSite === 'same-origin';
 }
 
-/** Throws 404 when a feature is switched off in site.config.js, so disabled endpoints don't exist. */
 export function requireFeature(name) {
 	const f = site.features || {};
 	const enabled = name === 'stripe' || name === 'paypal' ? f.shop && f[name] : f[name];

@@ -6,12 +6,15 @@
 	@return math.div($pixels, 16) * 1rem;
 }
 
-// Mobile-first: @include up(md) { … }  → min-width: 768px
+// Scales from $min px up to $max px, reaching $max at the 1440px design width.
+@function fluid($min, $max) {
+	@return clamp(#{rem($min)}, #{math.div($max, $design-width) * 100}vw, #{rem($max)});
+}
+
 @mixin up($bp) {
 	@media (min-width: map.get($breakpoints, $bp)) { @content; }
 }
 
-// Desktop-first: @include down(sm) { … } → max-width: 575.98px
 @mixin down($bp) {
 	@media (max-width: map.get($breakpoints, $bp) - 0.02px) { @content; }
 }

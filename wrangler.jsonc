@@ -1,6 +1,5 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
-	// Rename per site: becomes <name>.<account>.workers.dev
 	"name": "starter-static",
 	"main": "worker/index.js",
 	"compatibility_date": "2025-11-01",
@@ -10,8 +9,8 @@
 	"assets": {
 		"directory": "./dist",
 		"binding": "ASSETS",
-		"html_handling": "auto-trailing-slash", // /about serves about.html
-		"not_found_handling": "404-page", // serves dist/404.html with a 404 status
+		"html_handling": "auto-trailing-slash",
+		"not_found_handling": "404-page",
 		"run_worker_first": ["/api/*"]
 	},
 
@@ -19,10 +18,10 @@
 
 	// Non-secret settings. Secrets: `wrangler secret put NAME` (prod) or .dev.vars (local).
 	"vars": {
-		"CONTACT_TO": "owner@example.com", // where contact messages & order notifications go
+		"CONTACT_TO": "owner@example.com",
 		"EMAIL_FROM": "website@example.com", // must be on a domain you control in Cloudflare/Resend
 		"EMAIL_FROM_NAME": "Website",
-		"PAYPAL_ENV": "sandbox" // "live" in production
+		"PAYPAL_ENV": "sandbox"
 	}
 
 	// Cloudflare Email Routing transport (alternative to RESEND_API_KEY). Requires Email Routing

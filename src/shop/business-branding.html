@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<include src="partials/head.html" title="Business Branding" description="Business branding package from Rock Paper Branding: logos, color palette, typography and brand guidelines."></include>
+</head>
+<body>
+	<include src="partials/header.html"></include>
+
+	<main id="main-content" tabindex="-1">
+		<each in="catalog.single.business-branding" as="product"><include src="partials/product-page.html"></include></each>
+
+		<section id="product-details" class="band band--dark">
+			<div class="container">
+				<h2>What’s included</h2>
+				<p>Placeholder: a short overview of the Business Branding package goes here.</p>
+				<ul>
+					<li>Placeholder deliverable one</li>
+					<li>Placeholder deliverable two</li>
+					<li>Placeholder deliverable three</li>
+				</ul>
+				<p>Placeholder: timeline, process and anything the client should know before buying.</p>
+			</div>
+		</section>
+
+		<include src="partials/get-in-touch.html"></include>
+	</main>
+
+	<include src="partials/footer.html"></include>
+</body>
+</html>

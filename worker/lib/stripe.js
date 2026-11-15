@@ -29,7 +29,6 @@ async function stripe(env, path, params) {
 	return data;
 }
 
-/** POST {items:[{id, qty}]} → {url} of a Stripe-hosted Checkout page */
 export async function createStripeCheckout(request, env) {
 	requireFeature('stripe');
 	requireEnv(env, 'STRIPE_SECRET_KEY');
@@ -53,7 +52,6 @@ export async function createStripeCheckout(request, env) {
 	return json({ url: session.url });
 }
 
-/** Stripe → us. Signature-verified; extend the switch for fulfilment (inventory, CRM, etc.). */
 export async function handleStripeWebhook(request, env, ctx) {
 	requireFeature('stripe');
 	requireEnv(env, 'STRIPE_WEBHOOK_SECRET');

@@ -1,13 +1,6 @@
 import { loadScript, meta } from './util.js';
 
-/**
- * Minimal client cart. Stores only {id, qty} plus a display name/price; the Worker re-prices
- * every item from catalog/products.json, so tampering with localStorage cannot change what is charged.
- *
- *   <button data-add-to-cart="sku" data-name="…" data-price="4500">   (price in cents, display only)
- *   <span data-cart-count>          header badge
- *   <div data-cart>…</div>          cart page (see src/cart.html)
- */
+// The Worker re-prices every item from catalog/products.json, so editing localStorage cannot change what is charged.
 const KEY = 'cart:v1';
 const currency = (meta('shop-currency') || 'usd').toUpperCase();
 const money = new Intl.NumberFormat(document.documentElement.lang || 'en', { style: 'currency', currency });
@@ -35,7 +28,6 @@ const announce = (message) => {
 };
 
 export default function initCart() {
-	// Returning from a successful checkout clears the cart
 	if (new URLSearchParams(location.search).get('checkout') === 'success') write([]);
 
 	document.addEventListener('click', (event) => {
@@ -63,7 +55,7 @@ export default function initCart() {
 		write(read().map((item) => (item.id === input.dataset.qty ? { ...item, qty } : item)));
 	});
 
-	window.addEventListener('storage', (event) => event.key === KEY && render()); // sync across tabs
+	window.addEventListener('storage', (event) => event.key === KEY && render());
 	render();
 	initPayPal();
 }
@@ -125,7 +117,7 @@ async function checkoutStripe(button) {
 		});
 		const data = await response.json().catch(() => ({}));
 		if (!response.ok || !data.url) throw new Error(data.error || 'Checkout is unavailable right now.');
-		location.assign(data.url); // Stripe-hosted checkout page
+		location.assign(data.url);
 	} catch (error) {
 		setCheckoutStatus(error.message);
 		button.disabled = false;

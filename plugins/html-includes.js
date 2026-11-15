@@ -1,25 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-/**
- * Build-time HTML partials (replaces the old runtime fetch('header.html') pattern).
- *
- *   <include src="partials/head.html" title="About" description="…"></include>
- *   <include src="partials/header.html" />
- *
- * Inside any page or partial:
- *   {{ title }}                      attribute passed to the include (or set on a parent include)
- *   {{ description || site.description }}   first truthy value wins; '…' literals allowed
- *   {{ site.name }} {{ page.url }} {{ page.path }} {{ year }} {{ nav }}
- *   <if feature="shop">…</if>        kept only when site.features.shop is true
- *   <if set="site.analytics.ga4">…</if>  kept only when the value is truthy
- *   <if not="hideHeader">…</if>      kept only when the value is falsy
- *   <each in="catalog.products" as="product">{{ product.name }}</each>   repeat per item (not nestable)
- *
- * Extra template data (e.g. the product catalog) is passed in via the `data` option.
- *
- * Runs as a `pre` transform so Vite still processes asset URLs inside partials.
- */
+// Runs as a `pre` transform so Vite still processes asset URLs inside partials.
 export default function htmlIncludes({ site, data = {}, partialsDir = 'partials' } = {}) {
 	let root;
 
@@ -91,7 +73,6 @@ export default function htmlIncludes({ site, data = {}, partialsDir = 'partials'
 			const partialPath = path.resolve(root, attrs.src);
 			if (!fs.existsSync(partialPath)) throw new Error(`[html-includes] ${attrs.src} not found (included from ${file})`);
 			const { src, ...rest } = attrs;
-			// Partials' <!-- doc comments --> are for developers, not the shipped HTML
 			const partial = fs.readFileSync(partialPath, 'utf8').replace(/<!--(?!\[if)[\s\S]*?-->\s*/g, '');
 			return render(partial, { ...vars, ...rest }, src, depth + 1);
 		});
@@ -113,6 +94,14 @@ export default function htmlIncludes({ site, data = {}, partialsDir = 'partials'
 			return `<a ${attrStr} rel="noopener noreferrer">`;
 		});
 	};
+
+	// Generic static hosts don't map /about to about.html the way Cloudflare and GitHub Pages do
+	const withHtmlExtension = (html) =>
+		site.hosting !== 'static'
+			? html
+			: html.replace(/(<a\s[^>]*?\bhref=")(\/(?!\/|api\/)[^"#?]*[^"#?/])(?=["#?])/g, (match, start, url) =>
+					/\.[a-z0-9]+$/i.test(url) ? match : `${start}${url}.html`,
+				);
 
 	// Vite adds `base` to asset URLs; page links (<a href="/about">, form actions) are ours to prefix
 	const withBase = (html) => {
@@ -156,9 +145,9 @@ export default function htmlIncludes({ site, data = {}, partialsDir = 'partials'
 					site,
 					year: new Date().getFullYear(),
 					nav: renderNav(pagePath),
-					page: { path: pagePath, url: site.url + pagePath },
+					page: { path: pagePath, url: site.rootUrl + pagePath + (site.hosting === 'static' && !pagePath.endsWith('/') ? '.html' : '') },
 				};
-				return withBase(hardenExternalLinks(render(html, vars, path.basename(ctx.filename))));
+				return withBase(withHtmlExtension(hardenExternalLinks(render(html, vars, path.basename(ctx.filename)))));
 			},
 		},
 	};

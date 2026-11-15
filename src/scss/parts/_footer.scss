@@ -1,11 +1,7 @@
 @use '../base/helpers' as *;
 
 #site-footer {
-	padding-block: rem(48);
-	color: var(--color-primary-contrast);
-	background: var(--color-primary);
-
-	a { color: inherit; }
+	> .band { padding-block: fluid(40, 96); }
 }
 
 .footer {
@@ -24,5 +20,12 @@
 		padding: 0;
 		list-style: none;
 	}
-	&__legal { flex: 0 1 100%; margin: 0; font-size: rem(14); opacity: 0.8; }
+	&__legal { flex: 0 1 100%; margin: 0; font-size: rem(14); opacity: 0.85; }
+	&__made-by {
+		margin: 0;
+		padding-block: rem(24);
+		font-size: fluid(14, 18);
+		text-align: center;
+		span { text-transform: uppercase; }
+	}
 }

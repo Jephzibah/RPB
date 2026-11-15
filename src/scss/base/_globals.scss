@@ -10,8 +10,8 @@ html {
 body {
 	margin: 0;
 	font-family: var(--font-body);
-	font-size: rem(17);
-	line-height: 1.6;
+	font-size: fluid(17, 24);
+	line-height: 1.5;
 	color: var(--color-text);
 	background: var(--color-bg);
 	-webkit-font-smoothing: antialiased;
@@ -69,11 +69,14 @@ code {
 	outline-offset: rem(2);
 }
 
-main:focus { outline: none; }
+main {
+	display: flex;
+	flex-direction: column;
+	&:focus { outline: none; }
+}
 
 .visually-hidden { @include visually-hidden; }
 
-// Inline Font Awesome SVGs (plugins/icons.js) behave like the icon font did: 1em tall, currentColor
 .fa-svg {
 	display: inline-block;
 	height: 1em;
@@ -91,7 +94,6 @@ main:focus { outline: none; }
 
 main section { padding-block: var(--space-section); }
 
-// Shared two-column layout: text + media/form
 .split {
 	display: flex;
 	flex-wrap: wrap;
@@ -103,7 +105,10 @@ main section { padding-block: var(--space-section); }
 	}
 }
 
-// Scroll reveal (js/modules/reveal.js). Only applied to below-the-fold elements, so nothing flashes.
+.placeholder {
+	background: var(--color-placeholder);
+}
+
 .reveal {
 	opacity: 0;
 	transform: translateY(rem(16));

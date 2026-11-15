@@ -14,7 +14,7 @@
 		"preview": "npm run build && wrangler dev --port 8787",
 		"deploy": "npm run build && wrangler deploy",
 		"axe:report": "node plugins/axe-reporter.js",
-		"check": "npm run build && npm run axe:report"
+		"check": "npm run build && npm run axe:report -- --build=check"
 	},
 	"browserslist": [
 		"last 2 Chrome versions",

@@ -1,14 +1,10 @@
 import { loadScript, meta } from './util.js';
 
-// GA4 only loads when site.config.js sets analytics.ga4 (Cloudflare Web Analytics is the cookieless default).
 export default function initAnalytics() {
-	const id = meta('ga4-id');
+	const id = meta('gtm-id');
 	if (!id) return;
+	// GTM requires the global dataLayer; this is the standard container snippet without the inline <script>
 	window.dataLayer = window.dataLayer || [];
-	window.gtag = function gtag() {
-		window.dataLayer.push(arguments);
-	};
-	window.gtag('js', new Date());
-	window.gtag('config', id);
-	loadScript(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`);
+	window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+	loadScript(`https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(id)}`);
 }

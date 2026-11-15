@@ -1,5 +1,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<if set="site.cspMeta"><meta http-equiv="Content-Security-Policy" content="{{ site.cspMeta }}"></if>
 <title><if set="title">{{ title }} | </if>{{ site.name }}</title>
 <meta name="description" content="{{ description || site.description }}">
 <link rel="canonical" href="{{ page.url }}">
@@ -11,19 +12,19 @@
 <meta property="og:url" content="{{ page.url }}">
 <meta property="og:title" content="{{ title || site.name }}">
 <meta property="og:description" content="{{ description || site.description }}">
-<meta property="og:image" content="{{ site.url }}{{ image || site.ogImage }}">
+<meta property="og:image" content="{{ site.rootUrl }}{{ image || site.ogImage }}">
 <meta name="twitter:card" content="summary_large_image">
 <if set="site.twitterHandle"><meta name="twitter:site" content="{{ site.twitterHandle }}"></if>
 
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-<link rel="preload" href="/assets/fonts/Lato-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/SweetSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/PlayfairDisplay-Regular.woff2" as="font" type="font/woff2" crossorigin>
 
 <if feature="shop"><meta name="shop-currency" content="{{ catalog.currency }}"></if>
 <if feature="paypal"><meta name="paypal-client-id" content="{{ site.paypal.clientId }}"></if>
-<if set="site.analytics.ga4"><meta name="ga4-id" content="{{ site.analytics.ga4 }}"></if>
+<if set="site.analytics.gtm"><meta name="gtm-id" content="{{ site.analytics.gtm }}"></if>
 <if set="site.analytics.cloudflareToken"><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "{{ site.analytics.cloudflareToken }}"}'></script></if>
 
 <script type="module" src="/js/main.js"></script>

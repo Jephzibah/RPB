@@ -25,7 +25,10 @@
 		padding: rem(20);
 		.btn { margin-top: auto; }
 	}
-	&__name { font-size: rem(22); }
+	&__name {
+		font-size: rem(22);
+		a { color: inherit; }
+	}
 	&__price { font-weight: 700; font-size: rem(20); }
 }
 

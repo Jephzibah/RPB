@@ -1,0 +1,30 @@
+@use '../base/helpers' as *;
+
+.taped-photo {
+	position: relative;
+	margin: 0;
+	padding: 0;
+
+	img {
+		width: 100%;
+		aspect-ratio: 3 / 4;
+		object-fit: cover;
+		box-shadow: 0 rem(6) rem(18) rgb(0 0 0 / 0.18);
+	}
+
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: 1;
+		top: -5%;
+		left: 30%;
+		width: 36%;
+		height: 11%;
+		background: rgb(228 231 240 / 0.88);
+		box-shadow: 0 rem(2) rem(4) rgb(0 0 0 / 0.12);
+		transform: rotate(3deg);
+	}
+
+	&--left { transform: rotate(-8deg); }
+	&--right { transform: rotate(10deg); }
+}

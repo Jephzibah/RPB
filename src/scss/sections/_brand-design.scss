@@ -1,0 +1,107 @@
+@use '../base/helpers' as *;
+
+#brand-identity {
+	padding-top: fluid(32, 46);
+
+	.tabs__list {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.tabs__tab {
+		position: relative;
+		display: block;
+		padding: rem(14) fluid(14, 20);
+		font-size: fluid(15, 24);
+		line-height: 1;
+		letter-spacing: 0.04em;
+		text-decoration: none;
+		text-transform: uppercase;
+		color: var(--color-text);
+		border: 1.5px solid var(--color-charcoal);
+		border-radius: rem(14) rem(14) 0 0;
+
+		&[aria-current] {
+			z-index: 1;
+			padding-bottom: calc(#{rem(14)} + 1.5px);
+			margin-bottom: -1.5px;
+			border-bottom-color: var(--color-surface);
+			background: var(--color-surface);
+		}
+	}
+	a.tabs__tab {
+		border-radius: rem(14);
+		&:hover { color: var(--color-accent); }
+	}
+
+	.tabs__panel {
+		padding: fluid(24, 50) fluid(20, 37);
+		border: 1.5px solid var(--color-charcoal);
+		border-radius: 0 rem(14) rem(14);
+	}
+	.tabs__content {
+		@include up(md) { max-width: 58%; }
+		ul {
+			margin: 0;
+			padding-left: 1.2em;
+		}
+	}
+}
+
+#becks-process {
+	padding-block: fluid(16, 40) fluid(48, 80);
+
+	h2 {
+		margin-bottom: fluid(20, 40);
+		font-size: fluid(44, 84);
+	}
+	ul {
+		margin: 0 0 1em;
+		padding-left: 1.2em;
+	}
+}
+
+#previous-work {
+	h2 {
+		margin-bottom: fluid(24, 70);
+		padding-left: fluid(0, 32);
+		font-size: fluid(44, 84);
+	}
+
+	.work {
+		--work-gap: #{fluid(8, 13)};
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--work-gap);
+		max-width: rem(1132);
+		margin-inline: auto;
+
+		&__col,
+		&__row {
+			display: flex;
+			gap: var(--work-gap);
+		}
+		&__col {
+			flex-direction: column;
+			flex: 0 1 100%;
+		}
+		&__col--narrow {
+			@include up(md) { flex: 0 1 calc(38% - var(--work-gap) / 2); }
+		}
+		&__col--wide {
+			@include up(md) { flex: 0 1 calc(62% - var(--work-gap) / 2); }
+		}
+
+		&__a { aspect-ratio: 297 / 206; }
+		&__b { flex: 0 1 63%; aspect-ratio: 297 / 353; }
+		&__c { flex: 0 1 calc(37% - var(--work-gap)); }
+		&__d,
+		&__e {
+			flex: 1 1 auto;
+			min-height: rem(180);
+		}
+	}
+}

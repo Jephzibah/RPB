@@ -2,19 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 
-/**
- * Font Awesome without the kit/CDN: write the usual markup
- *   <i class="fa-brands fa-github"></i>
- *   <i class="fa-solid fa-code" data-tooltip="Code"></i>
- * and the build inlines just that SVG (from @fortawesome/fontawesome-free) inside the <i>.
- * Existing CSS that targets the <i> keeps working; the SVG sizes itself to 1em and uses currentColor.
- *
- * Accessibility: decorative by default (aria-hidden). An <i> with data-tooltip, aria-label or title
- * becomes role="img" with that text as its accessible name.
- *
- * License: Font Awesome Free icons are CC BY 4.0. Credit "Icons by Font Awesome" somewhere on the site
- * (the template footer does this via site.config.js `iconCredit`).
- */
+// Font Awesome Free icons are CC BY 4.0: keep the "Icons by Font Awesome" credit (site.config.js `iconCredit`).
 const STYLES = { 'fa-brands': 'brands', 'fa-solid': 'solid', 'fa-regular': 'regular', fab: 'brands', fas: 'solid', far: 'regular' };
 
 export default function icons() {

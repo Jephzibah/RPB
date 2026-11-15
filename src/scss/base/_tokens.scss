@@ -1,18 +1,22 @@
-// Per-client theme. Change these (and _fonts.scss) to re-skin the whole site.
 :root {
-	--color-bg: #fbfaf7;
-	--color-surface: #ffffff;
-	--color-text: #1d1d24;
-	--color-muted: #5b5b66;
-	--color-primary: #13144a;
-	--color-primary-contrast: #ffffff;
-	--color-accent: #7f8c59;
-	--color-border: #e2e0da;
+	--color-charcoal: #323232;
+	--color-mist: #c1ccd8;
+	--color-white: #ffffff;
+	--color-placeholder: #790100; // red "image goes here" blocks in the mockup
+
+	--color-bg: var(--color-white);
+	--color-surface: var(--color-white);
+	--color-text: var(--color-charcoal);
+	--color-muted: #5a5a5a;
+	--color-primary: var(--color-charcoal);
+	--color-primary-contrast: var(--color-white);
+	--color-accent: #4f6378;
+	--color-border: #d9dfe6;
 	--color-success: #1f7a3f;
 	--color-error: #b3261e;
 
-	--font-body: 'Lato', system-ui, -apple-system, 'Segoe UI', sans-serif;
-	--font-heading: 'Playfair Display', Georgia, serif;
+	--font-body: 'Sweet Sans Pro', 'Sweet Sans', 'Lato', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-heading: 'Cinnamon Season Script', 'Playfair Display', Georgia, serif;
 
 	--radius: 0.5rem;
 	--radius-pill: 999px;
@@ -21,4 +25,7 @@
 	--space-section: clamp(2.5rem, 6vw, 5rem);
 	--gutter: clamp(1rem, 4vw, 2rem);
 	--reveal-duration: 350ms;
+	--wave-height: clamp(2.5rem, 6vw, 5.5rem);
 }
+
+.page-home { --color-bg: var(--color-mist); }

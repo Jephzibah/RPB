@@ -1,16 +1,187 @@
 @use '../base/helpers' as *;
 
 #hero {
-	background: var(--color-surface);
-	.hero__inner {
+	padding-top: fluid(16, 24);
+	text-align: center;
+
+	.hero__title {
+		margin-bottom: fluid(20, 30);
+		font-size: fluid(40, 96);
+		line-height: 1;
+	}
+	.hero__tagline {
+		display: block;
+		margin-top: fluid(12, 22);
+		font-family: var(--font-body);
+		font-size: fluid(14, 20);
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.hero__gallery {
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--gutter);
-		align-items: center;
-		> * { flex: 0 1 100%; }
-		@include up(lg) { > * { flex: 0 1 calc(50% - var(--gutter) / 2); } }
+		justify-content: center;
+		gap: fluid(12, 37);
+		max-width: rem(1038);
+		margin: 0 auto fluid(20, 20);
+		> * {
+			flex: 0 1 100%;
+			aspect-ratio: 223 / 122;
+			@include up(sm) { flex: 0 1 calc(33.333% - #{fluid(12, 37)} * 2 / 3); }
+		}
 	}
-	.hero__image img { border-radius: var(--radius); }
+
+	.btn { text-transform: uppercase; }
 }
 
-#testimonials { background: var(--color-surface); }
+#intro {
+	padding-top: fluid(56, 72);
+
+	.intro__card {
+		position: relative;
+		max-width: rem(1150);
+		margin-inline: auto;
+		padding: fluid(48, 64) fluid(20, 49) fluid(24, 40);
+		text-align: center;
+		background: var(--color-surface);
+		border-radius: fluid(14, 22);
+		p:last-child { margin-bottom: 0; }
+	}
+
+	.intro__title {
+		position: absolute;
+		top: -0.75em;
+		left: 0.4em;
+		margin: 0;
+		font-size: fluid(44, 84);
+		transform: rotate(-7.6deg);
+	}
+}
+
+#how-we-help {
+	padding-top: 0;
+	text-align: center;
+
+	h2 {
+		font-size: fluid(56, 126);
+		margin-bottom: fluid(16, 30);
+	}
+
+	.help {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: rem(48) fluid(16, 30);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+
+		&__item {
+			--line: #{fluid(40, 73)};
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			flex: 0 1 100%;
+			@include up(md) { flex: 0 1 calc(33.333% - #{fluid(16, 30)} * 2 / 3); }
+		}
+
+		&__icon {
+			position: relative;
+			display: grid;
+			place-items: center;
+			width: fluid(140, 210);
+			aspect-ratio: 1;
+			margin-bottom: var(--line);
+			font-size: fluid(60, 104);
+			color: var(--color-white);
+			background: var(--color-charcoal);
+			border-radius: 50%;
+
+			&::after {
+				content: '';
+				position: absolute;
+				top: 77%;
+				left: 50%;
+				width: rem(3);
+				height: calc(23% + var(--line));
+				background: var(--color-white);
+				transform: translateX(-50%);
+			}
+		}
+
+		&__label {
+			width: 100%;
+			max-width: rem(284);
+			margin: 0 0 fluid(16, 34);
+			padding: rem(18) rem(12);
+			font-family: var(--font-body);
+			font-size: fluid(16, 22);
+			line-height: 1;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			background: var(--color-surface);
+			border-radius: rem(4);
+		}
+
+		&__traits {
+			margin: 0;
+			line-height: 1.2;
+			span { display: block; }
+		}
+	}
+}
+
+#process {
+	padding-block: fluid(24, 40) fluid(56, 140);
+
+	h2 {
+		margin-bottom: fluid(24, 52);
+		padding-left: fluid(0, 32);
+		font-size: fluid(44, 84);
+	}
+
+	.accordion {
+		border-top: 2px solid var(--color-white);
+	}
+	details {
+		border-bottom: 2px solid var(--color-white);
+	}
+	summary {
+		flex-direction: row-reverse;
+		justify-content: flex-end;
+		gap: fluid(16, 32);
+		padding: rem(14) fluid(8, 32);
+		font-size: fluid(18, 30);
+		font-weight: 400;
+	}
+	.accordion__answer {
+		padding: 0 fluid(8, 32) rem(16) calc(#{fluid(8, 32)} + #{fluid(16, 32)} + 1.25em);
+	}
+}
+
+#meet-us {
+	padding-block: fluid(40, 130) fluid(40, 100);
+
+	.split { align-items: flex-start; }
+
+	.meet-us__photo {
+		padding: rem(24) fluid(16, 56);
+		@include up(md) { flex: 0 1 calc(42% - var(--gutter) / 2); }
+	}
+	.meet-us__text {
+		@include up(md) { flex: 0 1 calc(58% - var(--gutter) / 2); }
+	}
+
+	h2 {
+		margin-bottom: fluid(24, 60);
+		font-size: fluid(48, 114);
+		line-height: 1;
+	}
+	.meet-us__lead {
+		max-width: 20em;
+		margin-bottom: fluid(32, 110);
+		font-size: fluid(20, 34);
+		line-height: 1.25;
+	}
+}

@@ -65,7 +65,7 @@ For multi-step tasks, state a brief plan:
 ## Project: static site starter (Vite → Cloudflare Workers static assets)
 
 ### Architecture (read README.md for the full picture)
-- Pages are `src/*.html` (each becomes `/<name>`). `_*.html` files are not built.
+- Pages are `src/**/*.html` (each becomes `/<path>`, e.g. `shop/x.html` → `/shop/x`). `_*.html` files are not built.
 - Global components live in `src/partials/` and are inlined at BUILD time with `<include src="partials/x.html" attr="…">`
   (plugins/html-includes.js). Never fetch partials at runtime.
 - Per-site settings: `site.config.js` (public). Secrets: `wrangler secret put` / `.dev.vars` only — never in the repo.

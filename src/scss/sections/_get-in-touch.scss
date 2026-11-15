@@ -1,0 +1,23 @@
+@use '../base/helpers' as *;
+
+#get-in-touch {
+	padding-block: fluid(24, 40) fluid(40, 80);
+
+	.get-in-touch__title {
+		max-width: 20em;
+		margin: 0 auto fluid(32, 60);
+		font-family: var(--font-body);
+		font-size: fluid(22, 36);
+		line-height: 1.25;
+		text-align: center;
+	}
+
+	.get-in-touch__form {
+		max-width: rem(760);
+		margin-inline: auto;
+		padding: fluid(20, 40);
+		font-size: rem(17);
+		background: var(--color-surface);
+		box-shadow: var(--shadow);
+	}
+}

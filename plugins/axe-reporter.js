@@ -1,15 +1,19 @@
 import { spawn } from 'node:child_process';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { createServer } from 'vite';
 import { glob } from 'glob';
-import { basename } from 'node:path';
+import siteConfig from '../site.config.js';
 
 const PROJECT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const REPORT_PATH = resolve(PROJECT_ROOT, 'reports', 'axe-results.json');
 const REPORT_DISPLAY_PATH = 'reports/axe-results.json';
 const SIGNOFF_PATH = 'reports/accessibility-statement.md';
+const TEXT_REPORT_DISPLAY_DIR = 'reports/axe';
+const TEXT_REPORT_DIR = resolve(PROJECT_ROOT, TEXT_REPORT_DISPLAY_DIR);
+const BUILD_ARG = process.argv.find((a) => a.startsWith('--build='));
+const BUILD = BUILD_ARG ? BUILD_ARG.slice('--build='.length) : 'none (axe:report only)';
 const AXE_TAGS = [
   'wcag2a',
   'wcag2aa',
@@ -185,11 +189,47 @@ async function saveAuditError(error, auditUrl = null) {
   });
 }
 
+function formatNodeTarget(target) {
+  return Array.isArray(target) ? target.map(formatNodeTarget).join(' >>> ') : String(target);
+}
+
+function formatRuleDetails(title, rules) {
+  const lines = ['', title, '='.repeat(title.length)];
+  if (!rules.length) {
+    lines.push('None.');
+    return lines;
+  }
+  for (const rule of rules) {
+    const nodes = Array.isArray(rule.nodes) ? rule.nodes : [];
+    lines.push('', `[${rule.impact || 'unknown'}] ${rule.id}: ${rule.help || rule.description || ''}`);
+    if (rule.helpUrl) lines.push(`  Help: ${rule.helpUrl}`);
+    lines.push(`  Elements (${nodes.length}):`);
+    for (const node of nodes) lines.push(`    - ${formatNodeTarget(node.target)}`);
+  }
+  return lines;
+}
+
+async function saveTextReport(page, lines) {
+  const file = resolve(TEXT_REPORT_DIR, `${page.name}.txt`);
+  const header = [
+    `Accessibility report: ${page.name}`,
+    `Generated: ${new Date().toString()}`,
+    `Hosting: ${siteConfig.hosting || 'cloudflare'}`,
+    `Build: ${BUILD}`,
+    `Source: src/${page.name}.html`,
+    `Audited URL: ${page.url}`,
+  ];
+  await mkdir(dirname(file), { recursive: true });
+  await writeFile(file, `${[...header, ...lines].join('\n')}\n`, 'utf8');
+}
+
 export async function runAxeReport() {
   let server;
   let auditUrl = null;
+  let pages = [];
 
   try {
+    await rm(TEXT_REPORT_DIR, { recursive: true, force: true });
     server = await createServer({
       configFile: resolve(PROJECT_ROOT, 'vite.config.js'),
       mode: 'a11y',
@@ -207,14 +247,13 @@ export async function runAxeReport() {
     if (!address || typeof address === 'string') {
       throw new Error('Vite did not expose a local audit port.');
     }
-    const origin = `http://127.0.0.1:${address.port}/`;
-    // Audit every page (src/*.html, minus _drafts), not just the homepage
-    auditUrl = glob
-      .sync('src/*.html', { cwd: PROJECT_ROOT, ignore: 'src/_*.html' })
-      .map((file) => basename(file, '.html'))
+    const origin = `http://127.0.0.1:${address.port}${server.config.base}`;
+    pages = glob
+      .sync('**/*.html', { cwd: resolve(PROJECT_ROOT, 'src'), ignore: ['**/_*.html', 'partials/**', 'public/**'] })
+      .map((file) => file.replace(/\\/g, '/').replace(/\.html$/, ''))
       .sort()
-      .map((name) => origin + (name === 'index' ? '' : name))
-      .join(',');
+      .map((name) => ({ name, url: origin + (name === 'index' ? '' : name) }));
+    auditUrl = pages.map((page) => page.url).join(',');
 
     let outcome = await runAxeCli(auditUrl);
     const mismatch = `${outcome.stdout}\n${outcome.stderr}`.includes('This version of ChromeDriver only supports');
@@ -237,17 +276,38 @@ export async function runAxeReport() {
     }
 
     await saveJson(results);
+    const resultList = pageResults(results);
+    for (const [index, page] of pages.entries()) {
+      const result = resultList.find((item) => item?.url === page.url) || resultList[index];
+      await saveTextReport(page, [
+        formatAxeSummary(summarizeAxeResults(result)),
+        ...formatRuleDetails('Violations', result?.violations || []),
+        ...formatRuleDetails('Needs manual review (incomplete)', result?.incomplete || []),
+      ]);
+    }
     console.log(formatAxeSummary(summarizeAxeResults(results)));
+    console.log(`Text reports: ${TEXT_REPORT_DISPLAY_DIR}/ (one per page)\n`);
   } catch (error) {
     try {
       await saveAuditError(error, auditUrl);
     } catch (writeError) {
       console.warn(`Unable to write ${REPORT_DISPLAY_PATH}: ${errorMessage(writeError)}`);
     }
+    try {
+      for (const page of pages) {
+        await saveTextReport(page, [
+          '',
+          'STATUS: AUDIT FAILED. No results; do not treat this page as passing.',
+          `Reason: ${errorMessage(error)}`,
+        ]);
+      }
+    } catch (writeError) {
+      console.warn(`Unable to write ${TEXT_REPORT_DISPLAY_DIR}/: ${errorMessage(writeError)}`);
+    }
 
     console.warn('\naxe-core audit could not be completed (build remains successful).');
     console.warn(`Reason: ${errorMessage(error)}`);
-    console.warn(`Report: ${REPORT_DISPLAY_PATH}`);
+    console.warn(`Report: ${REPORT_DISPLAY_PATH} and ${TEXT_REPORT_DISPLAY_DIR}/`);
     console.warn(`Reminder: perform the manual checks and complete ${SIGNOFF_PATH}.\n`);
   } finally {
     if (server) {

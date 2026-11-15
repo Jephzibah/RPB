@@ -1,12 +1,7 @@
 import { EmailMessage } from 'cloudflare:email';
 
-/**
- * Sends a plain-text email. Transport is picked from the environment:
- *   1. RESEND_API_KEY  → Resend API (any recipient)
- *   2. SEND_EMAIL      → Cloudflare Email Routing binding (recipient must be a verified address)
- *   3. EMAIL_DEV_LOG=1 → just logs it (local development)
- * User input never goes into headers except a validated Reply-To.
- */
+// Transport: RESEND_API_KEY → Resend; else SEND_EMAIL binding (recipient must be verified); else EMAIL_DEV_LOG=1 logs it.
+// User input never goes into headers except a validated Reply-To.
 export async function sendEmail(env, { to, subject, text, replyTo }) {
 	const from = env.EMAIL_FROM;
 	const fromName = env.EMAIL_FROM_NAME || 'Website';

@@ -2,15 +2,10 @@ import { prefersReducedMotion } from './util.js';
 
 const STAGGER_MS = 350;
 
-/**
- * Fade/slide in [data-reveal] elements and images in <main> as they scroll into view.
- * data-reveal="left" | "right" slides horizontally (replaces the old scroll-position math).
- * Only elements starting below the fold are hidden, so nothing visible ever flashes.
- */
+// Only elements starting below the fold are hidden, so nothing already visible ever flashes.
 export default function initReveal() {
 	if (prefersReducedMotion() || !('IntersectionObserver' in window)) return;
 
-	// Skip images that sit inside an element that is already revealed as a whole
 	const targets = [...document.querySelectorAll('[data-reveal], main img')].filter(
 		(el) => el.matches('[data-reveal]') || !el.closest('[data-reveal]'),
 	);
