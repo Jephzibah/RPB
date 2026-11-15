@@ -1,12 +1,12 @@
 // Everything here is PUBLIC (it ends up in HTML). Secrets go in `wrangler secret put` / .dev.vars.
 export default {
 	name: 'Rock Paper Branding',
-	url: 'https://example.com', // origin the site is served from, no path or trailing slash
+	url: 'https://rockpaperbranding.com', // origin the site is served from, no path or trailing slash
 	// 'cloudflare' | 'github-pages' | 'static'. Only Cloudflare runs the Worker, so contact & shop switch off elsewhere.
-	hosting: 'github-pages',
+	hosting: 'cloudflare',
 	base: '', // empty = automatic ('/<repo>/' on GitHub Pages, else '/'). Set '/' for a GitHub Pages custom domain.
 	lang: 'en',
-	description: 'Rock Paper Branding is a full-service brand and website design studio for small businesses.',
+	description: 'Rock Paper Branding is a full-service brand & website design studio for small businesses.',
 	ogImage: '/og-image.jpg',
 	twitterHandle: '',
 	themeColor: '#323232',

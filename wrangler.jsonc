@@ -18,9 +18,9 @@
 
 	// Non-secret settings. Secrets: `wrangler secret put NAME` (prod) or .dev.vars (local).
 	"vars": {
-		"CONTACT_TO": "owner@example.com",
-		"EMAIL_FROM": "website@example.com", // must be on a domain you control in Cloudflare/Resend
-		"EMAIL_FROM_NAME": "Website",
+		"CONTACT_TO": "design@rockpaperbranding.com",
+		"EMAIL_FROM": "design@rockpaperbranding.com", // must be on a domain you control in Cloudflare/Resend
+		"EMAIL_FROM_NAME": "Rock, Paper, Branding",
 		"PAYPAL_ENV": "sandbox"
 	}
 
@@ -29,5 +29,5 @@
 	// "send_email": [{ "name": "SEND_EMAIL" }],
 
 	// Custom domain (DNS must be on Cloudflare). Replaces GitHub Pages + CNAME file.
-	// "routes": [{ "pattern": "example.com", "custom_domain": true }, { "pattern": "www.example.com", "custom_domain": true }]
+	"routes": [{ "pattern": "rockpaperbranding.com", "custom_domain": true }, { "pattern": "www.rockpaperbranding.com", "custom_domain": true }]
 }
