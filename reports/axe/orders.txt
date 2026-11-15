@@ -1,0 +1,38 @@
+Accessibility report: orders
+Generated: Sun Nov 15 2026 10:32:18 GMT-0500 (Eastern Standard Time)
+Hosting: cloudflare
+Build: check
+Source: src/orders.html
+Audited URL: http://127.0.0.1:49850/orders
+
+axe-core automated accessibility findings
+--------------------------------------------
+Critical: 0
+Serious: 0
+Moderate: 0
+Minor: 0
+Unknown: 0
+Total: 0 affected element(s) across 0 violating rule(s)
+Incomplete/manual review: 7 affected element(s)
+Report: reports/axe-results.json
+Automated findings are informational and do not fail the build.
+Reminder: perform the manual checks and complete reports/accessibility-statement.md.
+
+
+Violations
+==========
+None.
+
+Needs manual review (incomplete)
+================================
+
+[serious] color-contrast: Elements must meet minimum color contrast ratio thresholds
+  Help: https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=webdriverjs
+  Elements (7):
+    - .footer__brand
+    - .footer__links > li:nth-child(1) > a[href$="brand-design"]
+    - .footer__links > li:nth-child(2) > a[href$="about"]
+    - .footer__links > li:nth-child(3) > a[href$="shop"]
+    - .footer__links > li:nth-child(4) > a[href$="contact"]
+    - a[href$="orders"]
+    - .footer__legal

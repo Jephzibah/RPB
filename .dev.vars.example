@@ -19,3 +19,8 @@ PAYPAL_CLIENT_SECRET=
 
 # Preview password while site.comingSoon is on
 SITE_PASSWORD=preview
+
+# Signs customer order sessions. Production: `npx wrangler secret put ORDERS_SECRET` (any long random string)
+ORDERS_SECRET=dev-orders-secret
+# Local only: treat /admin requests on localhost as this signed-in admin (no Cloudflare Access locally)
+ACCESS_DEV_EMAIL=admin@example.com

@@ -25,7 +25,8 @@ export function buildCsp(site, { meta = false } = {}) {
 	};
 	const add = (dir, ...origins) => src[dir].push(...origins);
 
-	if (on.contact) {
+	// Turnstile guards the contact form and the shop's order-lookup form
+	if (on.contact || shop) {
 		add('script-src', 'https://challenges.cloudflare.com');
 		add('frame-src', 'https://challenges.cloudflare.com');
 	}
@@ -96,7 +97,7 @@ ${site.base}assets/*
 				'\n</urlset>\n';
 
 			this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap });
-			this.emitFile({ type: 'asset', fileName: 'robots.txt', source: site.comingSoon ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\n\nSitemap: ${site.rootUrl}/sitemap.xml\n` });
+			this.emitFile({ type: 'asset', fileName: 'robots.txt', source: site.comingSoon ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nDisallow: ${site.base}admin\nDisallow: ${site.base}orders\n\nSitemap: ${site.rootUrl}/sitemap.xml\n` });
 			if (site.hosting === 'cloudflare') this.emitFile({ type: 'asset', fileName: '_headers', source: headers() });
 			// Without this, GitHub Pages runs the output through Jekyll, which drops files starting with "_"
 			if (site.hosting === 'github-pages') this.emitFile({ type: 'asset', fileName: '.nojekyll', source: '' });

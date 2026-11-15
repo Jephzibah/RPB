@@ -12,6 +12,8 @@ const lazyModules = {
 	'[data-carousel]': () => import('./modules/carousel.js'),
 	'#contact-form': () => import('./modules/contact-form.js'),
 	'[data-cart-count], [data-add-to-cart], [data-cart]': () => import('./modules/cart.js'),
+	'[data-orders], [data-orders-verify]': () => import('./modules/orders.js'),
+	'[data-admin]': () => import('./modules/admin.js'),
 };
 
 for (const [selector, load] of Object.entries(lazyModules)) {

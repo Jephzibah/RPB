@@ -126,7 +126,7 @@ Pick the simplest option that fits:
 How the built-in cart works:
 
 - `catalog/products.json` is the single source of truth. The Worker looks up every price there, so a customer editing localStorage or a request can't change what they're charged. `stripePriceId` is optional; without it the Worker sends `price_data` from the catalog.
-- Stripe: `/api/checkout/stripe` creates a Checkout Session and redirects to Stripe's hosted page. Card data never touches the site, which keeps you at **PCI SAQ-A** scope. `/api/webhooks/stripe` verifies the signature and emails an order notification; extend it for fulfilment.
+- Stripe: `/api/checkout/stripe` creates a Checkout Session and redirects to Stripe's hosted page. Card data never touches the site, which keeps you at **PCI SAQ-A** scope. `/api/webhooks/stripe` verifies the signature, stores the order and emails the owner and customer (see Orders below).
 - PayPal: the order is created and captured server-side with the Orders v2 API. The Smart Buttons only collect approval.
 - Secrets: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET` (set with `wrangler secret put`). Set `PAYPAL_ENV=live` and the live PayPal client ID in `site.config.js` for production.
 - Webhook: in the Stripe dashboard add the endpoint `https://<domain>/api/webhooks/stripe` with the event `checkout.session.completed`.
@@ -137,6 +137,34 @@ Local testing:
 stripe listen --forward-to localhost:8787/api/webhooks/stripe   # prints whsec_… for .dev.vars
 # pay with card 4242 4242 4242 4242, any future date and CVC
 ```
+
+## Orders
+
+Paid orders are stored in Cloudflare D1 (`migrations/`). Customers look orders up by email. Site owners and the provider manage them at `/admin`.
+
+- **Customers** (`/orders`): enter the email they ordered with. They get a one-time link (expires in 15 minutes, max 3 per 15 minutes), confirm on `/orders/verify`, and get a 1-hour session. There are no accounts and no passwords. The response is identical whether or not the email has orders. Only a hash of each link token is stored.
+- **Admin** (`/admin`): order list and search, status and tracking (optionally emailing the customer), internal notes, change a customer's email, and CSV export. Cloudflare Access handles sign-in, and the Worker re-verifies Access's signed JWT on every `/api/admin/*` call. Every change goes to `audit_log` with who made it.
+- **Stored per order:** email, name, items, totals, shipping address, status and tracking. No card data.
+
+### Setup (one time per site)
+
+1. `npx wrangler d1 create <name>` and paste the `database_id` into `wrangler.jsonc`. Then `npx wrangler d1 migrations apply <name> --remote`. Run that again after adding a migration; deploys don't run migrations.
+2. `npx wrangler secret put ORDERS_SECRET` (a long random string, e.g. `openssl rand -base64 32`). Changing it signs every customer out.
+3. Zero Trust → Access → Applications → **Add a self-hosted application**:
+   - Domains `<domain>/admin` and `<domain>/api/admin`.
+   - Policy: **Allow**, emails = you (provider) + the site owner.
+   - Login method: one-time PIN (optionally Google).
+
+   Copy the team domain (`<team>.cloudflareaccess.com`) and the app's **Audience (AUD) tag** into `ACCESS_TEAM_DOMAIN` / `ACCESS_AUD` in `wrangler.jsonc`, and put your own email in `PROVIDER_EMAILS`.
+4. `workers_dev` and `preview_urls` are off in `wrangler.jsonc` so the Worker is only reachable on the domain Access protects. Keep it that way.
+
+Local: `npx wrangler d1 migrations apply <name> --local`. Then `ACCESS_DEV_EMAIL` and `ORDERS_SECRET` in `.dev.vars` let `/admin` work on localhost without Access.
+
+### Runbook: lost access
+
+- **Site owner changed or lost their email:** in Zero Trust → Access → the app's policy, replace their email. Update `CONTACT_TO` in `wrangler.jsonc` if order notifications should follow, then rebuild. Nothing in the database changes.
+- **Customer lost access to their email:** first confirm who they are another way, e.g. the order number plus the card's last 4 digits (in Stripe/PayPal), or a reply from a phone number on the order. Then use **Change a customer's email** on `/admin`. It moves every order on the old address, emails both addresses (the old one sees a masked new address) and writes the change to `audit_log`.
+- **Audit trail:** `npx wrangler d1 execute <name> --remote --command "SELECT * FROM audit_log ORDER BY id DESC LIMIT 50"`.
 
 ## Security headers
 

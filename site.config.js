@@ -25,7 +25,7 @@ export default {
 		contact: true,
 		shop: true,
 		stripe: true, // requires features.shop
-		paypal: true, // requires features.shop
+		paypal: false, // requires features.shop
 	},
 
 	analytics: {
@@ -34,8 +34,7 @@ export default {
 	},
 
 	turnstile: {
-		// Cloudflare test key (always passes). Replace with the real site key per domain.
-		siteKey: '1x00000000000000000000AA',
+		siteKey: '0x4AAAAAAGCF0PkXOZoI5jrg',
 	},
 
 	paypal: {

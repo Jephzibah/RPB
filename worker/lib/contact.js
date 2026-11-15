@@ -12,7 +12,7 @@ export async function handleContact(request, env) {
 	// Honeypot: bots fill every field. Pretend success so they don't retry.
 	if (form.get('company_website')) return json({ message: 'Thanks! Your message has been sent.' });
 
-	const human = await verifyTurnstile(form.get('cf-turnstile-response'), request.headers.get('CF-Connecting-IP'), env.TURNSTILE_SECRET);
+	const human = await verifyTurnstile(form.get('cf-turnstile-response'), request.headers.get('CF-Connecting-IP'), env.TURNSTILE_SECRET, 'contact');
 	if (!human) throw new HttpError(403, 'Spam check failed.');
 
 	const name = clean(form.get('name'), 100);

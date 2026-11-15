@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<include src="partials/head.html" title="Sign in to your orders" noindex="1"></include>
+</head>
+<body>
+	<include src="partials/header.html"></include>
+
+	<main id="main-content" tabindex="-1">
+		<section id="orders-verify">
+			<div class="container" data-orders-verify>
+				<h1>Your orders</h1>
+				<noscript><p>Signing in needs JavaScript.</p></noscript>
+				<p>Use the button below to finish signing in. The link from your email works once.</p>
+				<p><button class="btn" type="button" data-orders-verify-button>View my orders</button></p>
+				<p class="form__status" role="status" data-orders-status></p>
+			</div>
+		</section>
+	</main>
+
+	<include src="partials/footer.html"></include>
+</body>
+</html>

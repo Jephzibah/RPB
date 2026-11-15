@@ -1,0 +1,38 @@
+@use '../base/helpers' as *;
+
+#orders,
+#orders-verify {
+	padding-block: var(--space-section);
+
+	.container > * { max-width: rem(760); }
+
+	.orders__request,
+	.orders__results { margin-top: rem(24); }
+
+	.orders__list {
+		display: flex;
+		flex-direction: column;
+		gap: rem(16);
+		padding: 0;
+		list-style: none;
+	}
+
+	.orders__order {
+		padding: rem(20) rem(24);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+	}
+
+	.orders__number { margin: 0 0 rem(12); font-family: var(--font-body); font-size: rem(22); }
+
+	.orders__meta {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0 0 rem(12);
+		dt { flex: 0 1 30%; font-weight: 700; }
+		dd { flex: 0 1 70%; margin: 0; text-transform: capitalize; }
+	}
+
+	.orders__items { margin: 0; padding-left: rem(20); }
+}

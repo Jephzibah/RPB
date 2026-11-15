@@ -1,5 +1,6 @@
 import site from '../../site.config.js';
 import { isSameOrigin } from './http.js';
+import { hmacHex, readCookie, safeEqual } from './crypto.js';
 
 const PAGE = '/coming-soon';
 const COOKIE = 'site_preview';
@@ -12,27 +13,7 @@ const PUBLIC = [
 	/^\/assets\/rpb-logo-[^/]+$/,
 ];
 
-const encoder = new TextEncoder();
-
-async function token(password) {
-	const key = await crypto.subtle.importKey('raw', encoder.encode(password), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-	const signature = await crypto.subtle.sign('HMAC', key, encoder.encode('coming-soon-preview'));
-	return [...new Uint8Array(signature)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
-}
-
-function matches(a, b) {
-	const left = encoder.encode(a);
-	const right = encoder.encode(b);
-	return left.byteLength === right.byteLength && crypto.subtle.timingSafeEqual(left, right);
-}
-
-function readCookie(request, name) {
-	for (const part of (request.headers.get('Cookie') || '').split(';')) {
-		const [key, ...value] = part.trim().split('=');
-		if (key === name) return value.join('=');
-	}
-	return '';
-}
+const token = (password) => hmacHex(password, 'coming-soon-preview');
 
 const safeNext = (value) => (typeof value === 'string' && value.startsWith('/') && !value.startsWith('//') ? value : '/');
 
@@ -65,7 +46,7 @@ async function unlock(request, env, url) {
 	const form = await request.formData();
 	const next = safeNext(form.get('next'));
 	const password = String(form.get('password') || '');
-	if (!env.SITE_PASSWORD || !password || !matches(await token(password), await token(env.SITE_PASSWORD))) {
+	if (!env.SITE_PASSWORD || !password || !safeEqual(await token(password), await token(env.SITE_PASSWORD))) {
 		return page(request, env, { next, error: true });
 	}
 	return new Response(null, {
@@ -85,8 +66,9 @@ export async function comingSoon(request, env) {
 
 	if (url.pathname === '/api/unlock') return unlock(request, env, url);
 	if (url.pathname.startsWith('/api/webhooks/')) return null;
+	if (/^\/(api\/)?admin(\/|\.html$|$)/.test(url.pathname)) return null;
 	const cookie = readCookie(request, COOKIE);
-	if (env.SITE_PASSWORD && cookie && matches(cookie, await token(env.SITE_PASSWORD))) return null;
+	if (env.SITE_PASSWORD && cookie && safeEqual(cookie, await token(env.SITE_PASSWORD))) return null;
 	if (PUBLIC.some((pattern) => pattern.test(url.pathname))) return env.ASSETS.fetch(request);
 	return page(request, env, { next: url.pathname + url.search });
 }

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<include src="partials/head.html" title="Orders admin" noindex="1"></include>
+</head>
+<body>
+	<include src="partials/header.html"></include>
+
+	<main id="main-content" tabindex="-1">
+		<section id="admin">
+			<div class="container" data-admin>
+				<div class="admin__bar">
+					<h1>Orders</h1>
+					<p class="admin__who"><span data-admin-who></span> <a href="/cdn-cgi/access/logout">Sign out</a></p>
+				</div>
+				<noscript><p>The orders admin needs JavaScript.</p></noscript>
+				<p class="form__status" role="status" data-admin-status></p>
+
+				<form class="admin__filters" data-admin-filters>
+					<div class="form__field">
+						<label for="admin-q">Search</label>
+						<input id="admin-q" name="q" type="search" placeholder="Order number, email or name">
+					</div>
+					<div class="form__field">
+						<label for="admin-status">Status</label>
+						<select id="admin-status" name="status">
+							<option value="">Any</option>
+							<option value="paid">Paid</option>
+							<option value="processing">Processing</option>
+							<option value="shipped">Shipped</option>
+							<option value="complete">Complete</option>
+							<option value="refunded">Refunded</option>
+							<option value="cancelled">Cancelled</option>
+						</select>
+					</div>
+					<div class="admin__filter-actions">
+						<button class="btn" type="submit">Search</button>
+						<a class="btn btn--hollow" href="/api/admin/orders.csv" download>Export CSV</a>
+					</div>
+				</form>
+
+				<table class="admin__table">
+					<caption class="visually-hidden">Orders, newest first</caption>
+					<thead><tr><th scope="col">Order</th><th scope="col">Date</th><th scope="col">Customer</th><th scope="col">Total</th><th scope="col">Status</th></tr></thead>
+					<tbody data-admin-rows></tbody>
+				</table>
+				<p data-admin-empty hidden>No orders match.</p>
+				<p><button class="btn btn--hollow" type="button" data-admin-more hidden>Load more</button></p>
+
+				<div class="admin__detail" data-admin-detail tabindex="-1" hidden>
+					<h2 data-admin-detail-title></h2>
+					<div data-admin-detail-body></div>
+
+					<form class="form admin__update" data-admin-update>
+						<h3 class="form__field form__field--full">Update order</h3>
+						<div class="form__field">
+							<label for="admin-order-status">Status</label>
+							<select id="admin-order-status" name="status">
+								<option value="paid">Paid</option>
+								<option value="processing">Processing</option>
+								<option value="shipped">Shipped</option>
+								<option value="complete">Complete</option>
+								<option value="refunded">Refunded</option>
+								<option value="cancelled">Cancelled</option>
+							</select>
+						</div>
+						<div class="form__field">
+							<label for="admin-order-tracking">Tracking <span class="form__optional">(optional)</span></label>
+							<input id="admin-order-tracking" name="tracking" type="text" maxlength="200">
+						</div>
+						<div class="form__field form__field--full">
+							<label class="admin__check"><input name="notify" type="checkbox" checked> Email the customer about this change</label>
+						</div>
+						<div class="form__field form__field--full"><button class="btn" type="submit">Save</button></div>
+					</form>
+
+					<form class="form admin__note" data-admin-note>
+						<div class="form__field form__field--full">
+							<label for="admin-note">Add an internal note <span class="form__optional">(customers never see these)</span></label>
+							<textarea id="admin-note" name="body" rows="3" maxlength="2000" required></textarea>
+						</div>
+						<div class="form__field form__field--full"><button class="btn btn--hollow" type="submit">Add note</button></div>
+					</form>
+				</div>
+
+				<form class="form admin__email" data-admin-email>
+					<h2 class="form__field form__field--full">Change a customer's email</h2>
+					<p class="form__field form__field--full">Moves every order from the old address to the new one and emails both. Only do this after confirming who you're talking to, e.g. their order number and the last 4 digits of the card used.</p>
+					<div class="form__field">
+						<label for="admin-email-from">Current email</label>
+						<input id="admin-email-from" name="from" type="email" required maxlength="200">
+					</div>
+					<div class="form__field">
+						<label for="admin-email-to">New email</label>
+						<input id="admin-email-to" name="to" type="email" required maxlength="200">
+					</div>
+					<div class="form__field form__field--full">
+						<label class="admin__check"><input name="confirmed" type="checkbox" required> I've verified this person owns these orders</label>
+					</div>
+					<div class="form__field form__field--full"><button class="btn" type="submit">Change email</button></div>
+				</form>
+			</div>
+		</section>
+	</main>
+
+	<include src="partials/footer.html"></include>
+</body>
+</html>

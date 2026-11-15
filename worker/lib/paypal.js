@@ -1,6 +1,6 @@
 import { HttpError, json, requireFeature, requireEnv, readJson } from './http.js';
 import { resolveCart } from './catalog.js';
-import { sendEmail } from './email.js';
+import { recordOrder, notifyNewOrder } from './orders.js';
 
 const apiBase = (env) => (env.PAYPAL_ENV === 'live' ? 'https://api-m.paypal.com' : 'https://api-m.sandbox.paypal.com');
 
@@ -23,9 +23,9 @@ async function accessToken(env) {
 	return (await response.json()).access_token;
 }
 
-async function paypal(env, path, body) {
+async function paypal(env, path, body, method = 'POST') {
 	const response = await fetch(`${apiBase(env)}${path}`, {
-		method: 'POST',
+		method,
 		headers: { Authorization: `Bearer ${await accessToken(env)}`, 'Content-Type': 'application/json' },
 		body: body ? JSON.stringify(body) : undefined,
 	});
@@ -69,14 +69,24 @@ export async function capturePayPalOrder(request, env, ctx, [orderId]) {
 
 	const result = await paypal(env, `/v2/checkout/orders/${orderId}/capture`);
 	if (result.status === 'COMPLETED') {
+		// The capture response has no line items, so read the order back for them
+		const details = await paypal(env, `/v2/checkout/orders/${orderId}`, undefined, 'GET');
+		const unit = details.purchase_units?.[0] || {};
 		const capture = result.purchase_units?.[0]?.payments?.captures?.[0];
-		ctx.waitUntil(
-			sendEmail(env, {
-				to: env.CONTACT_TO,
-				subject: `New order: ${capture?.amount?.value} ${capture?.amount?.currency_code} (PayPal)`,
-				text: `PayPal order captured.\n\nOrder: ${result.id}\nPayer: ${result.payer?.email_address || '-'}\nAmount: ${capture?.amount?.value} ${capture?.amount?.currency_code}\n\nSee the PayPal dashboard for details and shipping.`,
-			}).catch((error) => console.error('Order email failed', error)),
-		);
+		const toCents = (value) => Math.round(Number.parseFloat(value) * 100);
+		const order = {
+			provider: 'paypal',
+			ref: result.id,
+			email: details.payer?.email_address || '',
+			name: [details.payer?.name?.given_name, details.payer?.name?.surname].filter(Boolean).join(' '),
+			currency: capture?.amount?.currency_code || unit.amount?.currency_code,
+			total: toCents(capture?.amount?.value ?? unit.amount?.value),
+			items: (unit.items || []).map((item) => ({ id: item.sku, name: item.name, qty: Number(item.quantity), price: toCents(item.unit_amount?.value) })),
+			shipping: unit.shipping || null,
+		};
+		const { number, created } = await recordOrder(env, order);
+		if (created) ctx.waitUntil(notifyNewOrder(env, { ...order, number }));
+		return json({ id: result.id, status: result.status, number });
 	}
 	return json({ id: result.id, status: result.status });
 }

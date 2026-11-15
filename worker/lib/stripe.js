@@ -1,6 +1,6 @@
 import { HttpError, json, requireFeature, requireEnv, readJson } from './http.js';
 import { resolveCart } from './catalog.js';
-import { sendEmail } from './email.js';
+import { recordOrder, notifyNewOrder } from './orders.js';
 
 const API = 'https://api.stripe.com/v1';
 
@@ -17,9 +17,9 @@ function formEncode(value, prefix = '', params = new URLSearchParams()) {
 
 async function stripe(env, path, params) {
 	const response = await fetch(`${API}${path}`, {
-		method: 'POST',
+		method: params ? 'POST' : 'GET',
 		headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, 'Content-Type': 'application/x-www-form-urlencoded' },
-		body: formEncode(params),
+		body: params ? formEncode(params) : undefined,
 	});
 	const data = await response.json();
 	if (!response.ok) {
@@ -54,7 +54,7 @@ export async function createStripeCheckout(request, env) {
 
 export async function handleStripeWebhook(request, env, ctx) {
 	requireFeature('stripe');
-	requireEnv(env, 'STRIPE_WEBHOOK_SECRET');
+	requireEnv(env, 'STRIPE_WEBHOOK_SECRET', 'STRIPE_SECRET_KEY');
 
 	const payload = await request.text();
 	const valid = await verifyStripeSignature(payload, request.headers.get('Stripe-Signature'), env.STRIPE_WEBHOOK_SECRET);
@@ -64,14 +64,20 @@ export async function handleStripeWebhook(request, env, ctx) {
 	switch (event.type) {
 		case 'checkout.session.completed': {
 			const session = event.data.object;
-			const amount = (session.amount_total / 100).toFixed(2);
-			ctx.waitUntil(
-				sendEmail(env, {
-					to: env.CONTACT_TO,
-					subject: `New order: ${amount} ${session.currency.toUpperCase()}`,
-					text: `Stripe checkout completed.\n\nSession: ${session.id}\nCustomer: ${session.customer_details?.email || '-'}\nAmount: ${amount} ${session.currency.toUpperCase()}\n\nSee the Stripe dashboard for line items and shipping.`,
-				}).catch((error) => console.error('Order email failed', error)),
-			);
+			if (session.payment_status !== 'paid') break;
+			const lineItems = await stripe(env, `/checkout/sessions/${encodeURIComponent(session.id)}/line_items?limit=100`);
+			const order = {
+				provider: 'stripe',
+				ref: session.id,
+				email: session.customer_details?.email || '',
+				name: session.customer_details?.name || '',
+				currency: session.currency,
+				total: session.amount_total,
+				items: lineItems.data.map((line) => ({ name: line.description, qty: line.quantity, price: line.price?.unit_amount ?? Math.round(line.amount_total / line.quantity) })),
+				shipping: session.collected_information?.shipping_details || session.shipping_details || null,
+			};
+			const { number, created } = await recordOrder(env, order);
+			if (created) ctx.waitUntil(notifyNewOrder(env, { ...order, number }));
 			break;
 		}
 		default:

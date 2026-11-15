@@ -3,7 +3,6 @@
 	"name": "rpb",
 	"main": "worker/index.js",
 	"compatibility_date": "2025-11-01",
-
 	// Static site = Vite's dist/. Only /api/* runs Worker code; everything else is served
 	// directly from Cloudflare's edge cache with the rules in dist/_headers.
 	"assets": {
@@ -11,23 +10,48 @@
 		"binding": "ASSETS",
 		"html_handling": "auto-trailing-slash",
 		"not_found_handling": "404-page",
-		"run_worker_first": ["/api/*"]
+		"run_worker_first": [
+			"/api/*"
+		]
 	},
-
-	"observability": { "enabled": true },
-
+	"observability": {
+		"enabled": true
+	},
+	// Off so the site (and /admin) is only reachable on the custom domain, where Cloudflare Access protects it.
+	"workers_dev": false,
+	"preview_urls": false,
+	// Orders, customer sign-in links and the admin audit log. Create with `npx wrangler d1 create rpb`.
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "rpb",
+			"database_id": "bbb4d4f3-df9f-40cc-b692-d264f1ec25cf",
+			"migrations_dir": "migrations"
+		}
+	],
 	// Non-secret settings. Secrets: `wrangler secret put NAME` (prod) or .dev.vars (local).
 	"vars": {
 		"CONTACT_TO": "design@rockpaperbranding.com",
 		"EMAIL_FROM": "design@rockpaperbranding.com", // must be on a domain you control in Cloudflare/Resend
 		"EMAIL_FROM_NAME": "Rock, Paper, Branding",
-		"PAYPAL_ENV": "sandbox"
+		"PAYPAL_ENV": "sandbox",
+		// Cloudflare Access app protecting /admin and /api/admin (Zero Trust → Access → Applications)
+		"ACCESS_TEAM_DOMAIN": "rock-paper-branding.cloudflareaccess.com", // e.g. yourteam.cloudflareaccess.com
+		"ACCESS_AUD": "fb06466388ed59b03beba7325c969994b5916bd7949da3227432e42cc7ef8c44", // the application's Audience (AUD) tag
+		"PROVIDER_EMAILS": "design@rockpaperbranding.com" // comma-separated; these admins are labelled "provider" in the audit log
 	},
-
 	// Cloudflare Email Routing transport (alternative to RESEND_API_KEY). Requires Email Routing
 	// enabled on the domain and CONTACT_TO verified as a destination address.
 	// "send_email": [{ "name": "SEND_EMAIL" }],
-
 	// Custom domain (DNS must be on Cloudflare). Replaces GitHub Pages + CNAME file.
-	"routes": [{ "pattern": "rockpaperbranding.com", "custom_domain": true }, { "pattern": "www.rockpaperbranding.com", "custom_domain": true }]
+	"routes": [
+		{
+			"pattern": "rockpaperbranding.com",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.rockpaperbranding.com",
+			"custom_domain": true
+		}
+	]
 }
