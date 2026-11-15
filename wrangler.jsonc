@@ -1,6 +1,6 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
-	"name": "starter-static",
+	"name": "rpb",
 	"main": "worker/index.js",
 	"compatibility_date": "2025-11-01",
 
