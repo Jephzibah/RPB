@@ -42,7 +42,7 @@ export default defineConfig({
 		icons(),
 		responsiveImages(),
 		siteFiles({ site }),
-		prodBranch(), // snapshots dist/ to the `prod` branch after each build
+		prodBranch({ site }), // snapshots dist/ to the `prod` branch after each build
 	],
 
 	server: {

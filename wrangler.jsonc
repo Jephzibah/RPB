@@ -22,7 +22,7 @@
 		"EMAIL_FROM": "design@rockpaperbranding.com", // must be on a domain you control in Cloudflare/Resend
 		"EMAIL_FROM_NAME": "Rock, Paper, Branding",
 		"PAYPAL_ENV": "sandbox"
-	}
+	},
 
 	// Cloudflare Email Routing transport (alternative to RESEND_API_KEY). Requires Email Routing
 	// enabled on the domain and CONTACT_TO verified as a destination address.

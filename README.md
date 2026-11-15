@@ -86,7 +86,8 @@ Write normal Font Awesome markup (`<i class="fa-solid fa-code"></i>`). The build
 ### Cloudflare setup (one time per site)
 
 1. Add the domain to Cloudflare (nameservers). SSL/TLS mode: **Full (strict)**. Turn on **Always Use HTTPS**.
-2. Deploy: `npx wrangler login && npm run deploy`, or (recommended) **Workers & Pages → Create → Import a repository** to get automatic deploys on push and preview URLs per branch.
+2. Deploy from the `prod` branch: **Workers & Pages → Create → Workers → Import a repository** (it starts on the default branch; that's expected). Then in the Worker's **Settings → Build**: production branch `prod`, build command empty, deploy command `npx wrangler deploy`. The Worker name must match `name` in `wrangler.jsonc`.
+   Every local `npm run build` (with `hosting: 'cloudflare'`) writes the bundled Worker (`_worker/`) and a generated `wrangler.jsonc` into `dist/`, pushes `prod`, and Cloudflare deploys exactly that. `npm run deploy` still deploys straight from your machine.
 3. Custom domain: uncomment `routes` in `wrangler.jsonc` (or add it under Worker → Settings → Domains). Cloudflare creates the DNS records.
 4. **Turnstile:** create a widget for the domain, put the site key in `site.config.js`, then `npx wrangler secret put TURNSTILE_SECRET`.
 5. **Email** (choose one):
