@@ -16,3 +16,6 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 # PayPal sandbox app: https://developer.paypal.com/dashboard/applications/sandbox
 PAYPAL_CLIENT_ID=
 PAYPAL_CLIENT_SECRET=
+
+# Preview password while site.comingSoon is on
+SITE_PASSWORD=preview

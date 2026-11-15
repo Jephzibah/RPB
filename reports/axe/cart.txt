@@ -1,19 +1,21 @@
 Accessibility report: cart
-Generated: Sat Nov 14 2026 22:37:34 GMT-0500 (Eastern Standard Time)
-Hosting: github-pages
+Generated: Sun Nov 15 2026 10:01:17 GMT-0500 (Eastern Standard Time)
+Hosting: cloudflare
 Build: check
 Source: src/cart.html
-Audited URL: http://127.0.0.1:63803/RPB/cart
+Audited URL: http://127.0.0.1:63624/cart
 
 axe-core automated accessibility findings
 --------------------------------------------
 Critical: 0
-Serious: 0
+Serious: 3
+  - Elements must meet minimum color contrast ratio thresholds (color-contrast): 1
+  - Elements must have their visible text as part of their accessible name (label-content-name-mismatch): 2
 Moderate: 0
 Minor: 0
 Unknown: 0
-Total: 0 affected element(s) across 0 violating rule(s)
-Incomplete/manual review: 4 affected element(s)
+Total: 3 affected element(s) across 2 violating rule(s)
+Incomplete/manual review: 9 affected element(s)
 Report: reports/axe-results.json
 Automated findings are informational and do not fail the build.
 Reminder: perform the manual checks and complete reports/accessibility-statement.md.
@@ -21,15 +23,38 @@ Reminder: perform the manual checks and complete reports/accessibility-statement
 
 Violations
 ==========
-None.
+
+[serious] color-contrast: Elements must meet minimum color contrast ratio thresholds
+  Help: https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=webdriverjs
+  Elements (1):
+    - #jsx-iframe-527100fa39 >>> .paypal-powered-by > .immediate
+
+[serious] label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+  Help: https://dequeuniversity.com/rules/axe/4.14/label-content-name-mismatch?application=webdriverjs
+  Elements (2):
+    - #jsx-iframe-527100fa39 >>> div[data-funding-source="paylater"]
+    - #jsx-iframe-5b0a5425c3 >>> div[data-funding-source="paylater"]
 
 Needs manual review (incomplete)
 ================================
 
+[serious] aria-prohibited-attr: Elements must only use permitted ARIA attributes
+  Help: https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=webdriverjs
+  Elements (1):
+    - #jsx-iframe-527100fa39 >>> #buttons-container
+
 [serious] color-contrast: Elements must meet minimum color contrast ratio thresholds
   Help: https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=webdriverjs
-  Elements (4):
+  Elements (6):
     - .footer__brand
     - .footer__links > li:nth-child(1) > a[href$="brand-design"]
     - .footer__links > li:nth-child(2) > a[href$="about"]
+    - .footer__links > li:nth-child(3) > a[href$="shop"]
+    - .footer__links > li:nth-child(4) > a[href$="contact"]
     - .footer__legal
+
+[serious] frame-title-unique: Frames must have a unique title attribute
+  Help: https://dequeuniversity.com/rules/axe/4.14/frame-title-unique?application=webdriverjs
+  Elements (2):
+    - #jsx-iframe-527100fa39
+    - #jsx-iframe-5b0a5425c3

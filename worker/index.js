@@ -2,8 +2,9 @@ import { HttpError, json, isSameOrigin } from './lib/http.js';
 import { handleContact } from './lib/contact.js';
 import { createStripeCheckout, handleStripeWebhook } from './lib/stripe.js';
 import { createPayPalOrder, capturePayPalOrder } from './lib/paypal.js';
+import { comingSoon } from './lib/coming-soon.js';
 
-// Only /api/* reaches this code (wrangler.jsonc `run_worker_first`). Routes: [method, path pattern, handler, options]
+// Only /api/* reaches this code (wrangler.jsonc `run_worker_first`), or every request while site.comingSoon is on. Routes: [method, path pattern, handler, options]
 const routes = [
 	['POST', /^\/api\/contact$/, handleContact],
 	['POST', /^\/api\/checkout\/stripe$/, createStripeCheckout],
@@ -14,6 +15,9 @@ const routes = [
 
 export default {
 	async fetch(request, env, ctx) {
+		const gated = await comingSoon(request, env);
+		if (gated) return gated;
+
 		const url = new URL(request.url);
 		if (!url.pathname.startsWith('/api/')) return env.ASSETS.fetch(request);
 

@@ -25,7 +25,8 @@ catalog.products = catalog.products
 catalog.single = Object.fromEntries(catalog.products.map((p) => [p.id, [p]]));
 
 export function pageEntries() {
-	return glob.sync('**/*.html', { cwd: './src', ignore: ['**/_*.html', 'partials/**', 'public/**'] }).reduce((entries, path) => {
+	const ignore = ['**/_*.html', 'partials/**', 'public/**', ...(site.comingSoon ? [] : ['coming-soon.html'])];
+	return glob.sync('**/*.html', { cwd: './src', ignore }).reduce((entries, path) => {
 		const name = path.replace(/\\/g, '/').replace(/\.html$/, '');
 		entries[name] = resolve(import.meta.dirname, 'src', path);
 		return entries;

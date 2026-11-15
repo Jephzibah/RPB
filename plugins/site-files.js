@@ -96,7 +96,7 @@ ${site.base}assets/*
 				'\n</urlset>\n';
 
 			this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap });
-			this.emitFile({ type: 'asset', fileName: 'robots.txt', source: `User-agent: *\nAllow: /\n\nSitemap: ${site.rootUrl}/sitemap.xml\n` });
+			this.emitFile({ type: 'asset', fileName: 'robots.txt', source: site.comingSoon ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\n\nSitemap: ${site.rootUrl}/sitemap.xml\n` });
 			if (site.hosting === 'cloudflare') this.emitFile({ type: 'asset', fileName: '_headers', source: headers() });
 			// Without this, GitHub Pages runs the output through Jekyll, which drops files starting with "_"
 			if (site.hosting === 'github-pages') this.emitFile({ type: 'asset', fileName: '.nojekyll', source: '' });

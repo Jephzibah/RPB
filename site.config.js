@@ -5,6 +5,8 @@ export default {
 	// 'cloudflare' | 'github-pages' | 'static'. Only Cloudflare runs the Worker, so contact & shop switch off elsewhere.
 	hosting: 'cloudflare',
 	base: '', // empty = automatic ('/<repo>/' on GitHub Pages, else '/'). Set '/' for a GitHub Pages custom domain.
+	// Cloudflare only: every URL shows /coming-soon until the SITE_PASSWORD secret is entered. Crawlers are blocked.
+	comingSoon: true,
 	lang: 'en',
 	description: 'Rock Paper Branding is a full-service brand & website design studio for small businesses.',
 	ogImage: '/og-image.jpg',

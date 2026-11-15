@@ -1,0 +1,39 @@
+@use '../base/helpers' as *;
+
+.page-coming-soon { --color-bg: var(--color-mist); }
+
+#coming-soon {
+	display: flex;
+	align-items: center;
+	min-height: 100vh;
+	min-height: 100svh;
+	padding-block: fluid(40, 80);
+
+	.container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.coming-soon__logo {
+		width: fluid(130, 184);
+		height: auto;
+		margin-bottom: fluid(32, 60);
+	}
+
+	.coming-soon__title {
+		margin: 0 0 rem(16);
+		font-size: fluid(36, 64);
+	}
+
+	.coming-soon__form {
+		width: 100%;
+		max-width: rem(420);
+		margin-top: fluid(32, 48);
+		padding: fluid(20, 32);
+		text-align: left;
+		background: var(--color-surface);
+		box-shadow: var(--shadow);
+	}
+}

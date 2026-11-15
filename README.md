@@ -95,6 +95,8 @@ Write normal Font Awesome markup (`<i class="fa-solid fa-code"></i>`). The build
    - Cloudflare Email Routing: enable it on the domain, verify `CONTACT_TO` as a destination, and uncomment `send_email` in `wrangler.jsonc`.
 6. Optional: turn on Web Analytics (cookieless) and paste the token into `site.config.js`. Add a rate-limiting rule for `/api/*` under Security → WAF.
 
+**Coming soon / password preview:** set `comingSoon: true` in `site.config.js` and `npx wrangler secret put SITE_PASSWORD`. While it's on, the build makes the Worker run for every request (`run_worker_first: true` in the generated `dist/wrangler.jsonc`). Every URL then shows `src/coming-soon.html` with a 503 and `X-Robots-Tag: noindex`, and robots.txt disallows everything. Entering the password sets a 30-day cookie. Changing the secret signs everyone out. Stripe webhooks still get through. To launch, set `comingSoon: false` and build. Cloudflare only: on other hosts the site is **not** protected.
+
 **Moving a site off GitHub Pages:** deploy to Cloudflare first and test it on the `*.workers.dev` URL. Then add the custom domain to the Worker; this replaces the old GitHub Pages DNS records. Finally, set `hosting: 'cloudflare'`, turn off Pages in the GitHub repo settings and delete the `CNAME` file.
 
 ## Hosting

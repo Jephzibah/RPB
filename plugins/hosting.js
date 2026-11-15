@@ -30,6 +30,8 @@ export default function resolveHosting(site) {
 		if (disabled.length) console.warn(`[hosting] ${hosting}: no Worker to run /api, so these features are off: ${disabled.join(', ')}`);
 	}
 
+	if (site.comingSoon && hosting !== 'cloudflare') console.warn(`[hosting] ${hosting}: comingSoon needs the Worker, so the site is NOT password protected here.`);
+
 	return {
 		...site,
 		hosting,

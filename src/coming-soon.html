@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<include src="partials/head.html" title="Coming soon" noindex="1"></include>
+</head>
+<body class="page-coming-soon">
+	<main id="main-content">
+		<section id="coming-soon">
+			<div class="container">
+				<img class="coming-soon__logo" src="/assets/images/rpb-logo.png" alt="{{ site.name }}" sizes="(min-width: 768px) 184px, 130px" data-eager>
+				<h1 class="coming-soon__title">Something new is on the way</h1>
+				<p>Our new site is almost ready. Check back soon!</p>
+				<form class="form coming-soon__form" action="/api/unlock" method="post">
+					<input type="hidden" name="next" value="/">
+					<div class="form__field form__field--full">
+						<label for="cs-password">Preview password</label>
+						<input id="cs-password" name="password" type="password" autocomplete="current-password" required aria-describedby="cs-error">
+					</div>
+					<div class="form__field form__field--full">
+						<button class="btn" type="submit">Enter</button>
+						<p id="cs-error" class="form__status" data-state="error" data-unlock-error></p>
+					</div>
+				</form>
+			</div>
+		</section>
+	</main>
+</body>
+</html>
