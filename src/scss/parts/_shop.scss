@@ -18,6 +18,8 @@
 	border-radius: var(--radius);
 	overflow: hidden;
 
+	&__image { display: block; }
+
 	&__body {
 		display: flex;
 		flex-direction: column;

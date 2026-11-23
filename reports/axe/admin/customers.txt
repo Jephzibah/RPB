@@ -1,9 +1,9 @@
 Accessibility report: admin/customers
-Generated: Sun Nov 15 2026 12:28:38 GMT-0500 (Eastern Standard Time)
+Generated: Mon Nov 23 2026 16:36:32 GMT-0500 (Eastern Standard Time)
 Hosting: cloudflare
 Build: check
 Source: src/admin/customers.html
-Audited URL: http://127.0.0.1:59371/admin/customers
+Audited URL: http://127.0.0.1:50733/admin/customers
 
 axe-core automated accessibility findings
 --------------------------------------------

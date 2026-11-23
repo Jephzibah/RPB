@@ -1,8 +1,9 @@
 <!-- Expects a `product` from <each in="catalog.products" as="product"> -->
 <article class="product" id="product-{{ product.id }}">
-	<div class="product__image">
-		<img src="{{ product.image }}" alt="{{ product.name }}" sizes="(min-width: 768px) 33vw, 100vw">
-	</div>
+	<!-- Mouse/touch shortcut to the product; the name link below is the one keyboard and screen-reader users get -->
+	<a class="product__image" href="/shop/{{ product.id }}" tabindex="-1" aria-hidden="true">
+		<img src="{{ product.image }}" alt="" sizes="(min-width: 768px) 33vw, 100vw">
+	</a>
 	<div class="product__body">
 		<h2 class="product__name"><a href="/shop/{{ product.id }}">{{ product.name }}</a></h2>
 		<p class="product__description">{{ product.description }}</p>
