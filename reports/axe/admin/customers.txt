@@ -1,9 +1,9 @@
 Accessibility report: admin/customers
-Generated: Tue Nov 24 2026 15:44:25 GMT-0500 (Eastern Standard Time)
+Generated: Wed Nov 25 2026 14:17:30 GMT-0500 (Eastern Standard Time)
 Hosting: cloudflare
 Build: check
 Source: src/admin/customers.html
-Audited URL: http://127.0.0.1:58654/admin/customers
+Audited URL: http://127.0.0.1:58316/admin/customers
 
 axe-core automated accessibility findings
 --------------------------------------------
@@ -13,7 +13,7 @@ Moderate: 0
 Minor: 0
 Unknown: 0
 Total: 0 affected element(s) across 0 violating rule(s)
-Incomplete/manual review: 9 affected element(s)
+Incomplete/manual review: 10 affected element(s)
 Report: reports/axe-results.json
 Automated findings are informational and do not fail the build.
 Reminder: perform the manual checks and complete reports/accessibility-statement.md.
@@ -28,13 +28,14 @@ Needs manual review (incomplete)
 
 [serious] color-contrast: Elements must meet minimum color contrast ratio thresholds
   Help: https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=webdriverjs
-  Elements (8):
+  Elements (9):
     - .footer__brand
     - .footer__links > li:nth-child(1) > a[href$="brand-design"]
-    - .footer__links > li:nth-child(2) > a[href$="about"]
-    - .footer__links > li:nth-child(3) > a[href$="shop"]
-    - .footer__links > li:nth-child(4) > a[href$="contact"]
-    - .footer__links > li:nth-child(5) > a[href$="login"]
+    - .footer__links > li:nth-child(2) > a[href$="portfolio"]
+    - .footer__links > li:nth-child(3) > a[href$="about"]
+    - .footer__links > li:nth-child(4) > a[href$="shop"]
+    - .footer__links > li:nth-child(5) > a[href$="contact"]
+    - .footer__links > li:nth-child(6) > a[href$="login"]
     - a[href$="orders"]
     - .footer__legal
 

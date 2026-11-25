@@ -16,6 +16,7 @@ export default {
 
 	nav: [
 		{ label: 'Brand Design', href: '/brand-design' },
+		{ label: 'Portfolio', href: '/portfolio' },
 		{ label: 'About', href: '/about' },
 		{ label: 'Shop', href: '/shop', feature: 'shop' },
 		{ label: 'Contact', href: '/contact', feature: 'contact' },
