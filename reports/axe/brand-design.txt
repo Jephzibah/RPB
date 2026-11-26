@@ -1,9 +1,9 @@
 Accessibility report: brand-design
-Generated: Wed Nov 25 2026 14:17:30 GMT-0500 (Eastern Standard Time)
+Generated: Thu Nov 26 2026 08:39:04 GMT-0500 (Eastern Standard Time)
 Hosting: cloudflare
 Build: check
 Source: src/brand-design.html
-Audited URL: http://127.0.0.1:58316/brand-design
+Audited URL: http://127.0.0.1:62119/brand-design
 
 axe-core automated accessibility findings
 --------------------------------------------

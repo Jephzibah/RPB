@@ -1,0 +1,48 @@
+@use '../base/helpers' as *;
+
+.tabs__list {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.tabs__tab {
+	position: relative;
+	display: block;
+	padding: rem(14) fluid(14, 20);
+	font-size: fluid(15, 24);
+	line-height: 1;
+	letter-spacing: 0.04em;
+	text-decoration: none;
+	text-transform: uppercase;
+	color: var(--color-text);
+	border: 1.5px solid var(--color-charcoal);
+	border-radius: rem(14) rem(14) 0 0;
+
+	&[aria-current],
+	&[aria-selected='true'] {
+		z-index: 1;
+		padding-bottom: calc(#{rem(14)} + 1.5px);
+		margin-bottom: -1.5px;
+		border-bottom-color: var(--color-surface);
+		background: var(--color-surface);
+	}
+}
+a.tabs__tab:not([role='tab']) {
+	border-radius: rem(14);
+}
+a.tabs__tab:hover { color: var(--color-accent); }
+.tabs__tab[role='tab'] {
+	cursor: pointer;
+	border-bottom-color: transparent;
+}
+
+.tabs__panel {
+	padding: fluid(24, 50) fluid(20, 37);
+	border: 1.5px solid var(--color-charcoal);
+	border-radius: 0 rem(14) rem(14);
+
+	& + & { margin-top: var(--gutter); }
+}

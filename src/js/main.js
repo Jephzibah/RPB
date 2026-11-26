@@ -10,6 +10,8 @@ initAnalytics();
 
 const lazyModules = {
 	'[data-carousel]': () => import('./modules/carousel.js'),
+	'[data-tabs]': () => import('./modules/tabs.js'),
+	'[data-work-grid]': () => import('./modules/work-modal.js'),
 	'#contact-form': () => import('./modules/contact-form.js'),
 	'[data-cart-count], [data-add-to-cart], [data-cart]': () => import('./modules/cart.js'),
 	'[data-orders], [data-orders-verify], [data-login]': () => import('./modules/orders.js'),
